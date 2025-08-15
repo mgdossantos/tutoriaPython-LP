@@ -429,6 +429,210 @@
                 header.classList.remove('shadow-lg');
             }
         });
+          // Dicionário PT/EN
+  const I18N = {
+    pt: {
+      brand: "Python Tutoria",
+      "nav.about": "Sobre a Professora",
+      "nav.content": "Conteúdo",
+      "hero.title.highlight": "Tutoria de Python",
+      "hero.title.suffix": " – Plano Básico",
+      "hero.subtitle": "Aprenda programação do zero e crie seu primeiro projeto em 6 semanas",
+      "hero.ctaPrimary": "Garanta Sua Vaga",
+      "hero.ctaSecondary": "Saiba Mais",
+
+      "who.title": "📌 Para quem é essa tutoria?",
+      "who.card1": "Para quem <strong>nunca programou</strong> e quer aprender de forma prática",
+      "who.card2": "Para quem já <strong>tentou estudar sozinho</strong>, mas se perdeu no caminho",
+      "who.card3": "Para quem quer ter um <strong>projeto pronto</strong> para mostrar no portfólio",
+      "who.card4": "Para quem quer entender a <strong>lógica de programação</strong> e abrir portas para análise de dados, automação e IA",
+
+      "learn.title": "🚀 O que você vai aprender",
+      "learn.subtitle": "Em 6 semanas, você vai dominar:",
+      "learn.item1.title": "Fundamentos do Python",
+      "learn.item1.desc": "Sintaxe, variáveis, operadores",
+      "learn.item2.title": "Estruturas de decisão",
+      "learn.item2.desc": "if, else, elif",
+      "learn.item3.title": "Laços de repetição",
+      "learn.item3.desc": "for, while",
+      "learn.item4.title": "Funções",
+      "learn.item4.desc": "Como criar e reutilizar código",
+      "learn.item5.title": "Manipulação de dados",
+      "learn.item5.desc": "Listas, dicionários e strings",
+      "learn.item6.title": "Projeto final",
+      "learn.item6.desc": "Desenvolvimento do seu projeto",
+
+      "how.title": "📂 Como funciona",
+      "how.live.title": "6 encontros ao vivo",
+      "how.live.desc": "2 horas cada encontro",
+      "how.ex.title": "Exercícios práticos",
+      "how.ex.desc": "Toda semana para fixar o conteúdo",
+      "how.rec.title": "Gravação das aulas",
+      "how.rec.desc": "Para você rever quando quiser",
+      "how.proj.title": "Projeto final",
+      "how.proj.desc": "Com feedback individual",
+      "how.wa.title": "Grupo no WhatsApp",
+      "how.wa.desc": "Para avisos e interação rápida",
+
+      "project.title": "🎯 Projeto Final",
+      "project.name": "Gerenciador de Tarefas em Python",
+      "project.p1": "No final da tutoria, você vai criar um <strong>gerenciador de tarefas em Python</strong>, aplicando tudo o que aprendeu.",
+      "project.p2": "Esse projeto vai ser seu <strong>primeiro item de portfólio</strong>, com feedback personalizado para você evoluir ainda mais.",
+      "project.featuresTitle": "Funcionalidades do projeto:",
+      "project.f1": "✅ Adicionar tarefas",
+      "project.f2": "✅ Marcar como concluída",
+      "project.f3": "✅ Listar tarefas pendentes",
+      "project.f4": "✅ Salvar dados em arquivo",
+      "project.f5": "✅ Interface amigável",
+
+      "pricing.title": "💰 Investimento",
+      "pricing.plan": "Tutoria de Python - Plano Básico",
+      "pricing.brl": "R$ 397",
+      "pricing.cad": "CAD 117",
+      "pricing.start": "<strong>⚡ Início:</strong> 25 de Agosto de 2025",
+      "pricing.limited": "<strong>🚀 Vagas limitadas</strong> para garantir atenção individual a cada aluno",
+      "pricing.cta": "Garanta Sua Vaga!!",
+
+      "about.title": "👩‍🏫 Sobre a professora",
+      "about.role": "Professora & Doutoranda em Ciência da Computação",
+      "about.p1": "Sou Marcela dos Santos, professora há mais de 14 anos na área de computação, com experiência ensinando programação, lógica e tecnologias para diferentes públicos, do iniciante ao avançado.",
+      "about.p2": "Atualmente, sou doutoranda em Ciência da Computação no Canadá, pesquisando soluções inovadoras para software e robótica, e já participei de projetos educacionais com grandes empresas como Intel e Google.",
+      "about.p3": "Ao longo da minha trajetória, ensinei em universidades e cursos no Brasil e no Canadá, sempre com a mesma missão: tornar o aprendizado de tecnologia acessível, prático e motivador — mesmo para quem nunca programou antes.",
+      "about.p4": "Minha paixão é ver meus alunos ganhando confiança, conquistando autonomia e criando seus primeiros projetos. E é exatamente isso que vamos fazer juntos na Tutoria de Python – Plano Básico.",
+      "about.p5": "Aqui, você não vai só aprender código. Você vai aprender a pensar como programador(a), de forma simples, aplicada e com o apoio de quem realmente acredita no seu potencial. 🚀",
+      "about.linkedin": "Conecte-se no LinkedIn",
+
+      "contact.title": "Garantir Minha Vaga",
+      "contact.p1": "Preencha o formulário de inscrição e garante sua vaga na próxima turma!",
+      "contact.p2": "⚡ Vagas limitadas para garantir atenção individual<br>",
+      "contact.cta": "Preencher Formulário de Inscrição",
+
+      "footer.tagline": "Transformando vidas através da programação Python",
+      "footer.privacy": "Política de Privacidade",
+      "footer.terms": "Termos de Uso",
+      "footer.copy": "© 2024 Python Tutoria. Todos os direitos reservados."
+    },
+
+    en: {
+      brand: "Python Tutoring",
+      "nav.about": "About the Instructor",
+      "nav.content": "Curriculum",
+      "hero.title.highlight": "Python Tutoring",
+      "hero.title.suffix": " – Starter Plan",
+      "hero.subtitle": "Learn programming from scratch and build your first project in 6 weeks",
+      "hero.ctaPrimary": "Reserve Your Spot",
+      "hero.ctaSecondary": "Learn More",
+
+      "who.title": "📌 Who is this for?",
+      "who.card1": "For those who have <strong>never programmed</strong> and want a practical start",
+      "who.card2": "For those who <strong>tried studying alone</strong> but felt lost",
+      "who.card3": "For those who want a <strong>finished project</strong> for their portfolio",
+      "who.card4": "For those who want to grasp <strong>programming logic</strong> and open doors to data analysis, automation, and AI",
+
+      "learn.title": "🚀 What you will learn",
+      "learn.subtitle": "In 6 weeks, you will master:",
+      "learn.item1.title": "Python fundamentals",
+      "learn.item1.desc": "Syntax, variables, operators",
+      "learn.item2.title": "Decision structures",
+      "learn.item2.desc": "if, else, elif",
+      "learn.item3.title": "Loops",
+      "learn.item3.desc": "for, while",
+      "learn.item4.title": "Functions",
+      "learn.item4.desc": "How to create and reuse code",
+      "learn.item5.title": "Data handling",
+      "learn.item5.desc": "Lists, dictionaries, and strings",
+      "learn.item6.title": "Final project",
+      "learn.item6.desc": "Developing your own project",
+
+      "how.title": "📂 How it works",
+      "how.live.title": "6 live sessions",
+      "how.live.desc": "2 hours each",
+      "how.ex.title": "Hands-on exercises",
+      "how.ex.desc": "Weekly practice to consolidate learning",
+      "how.rec.title": "Recorded classes",
+      "how.rec.desc": "Rewatch anytime",
+      "how.proj.title": "Final project",
+      "how.proj.desc": "With individual feedback",
+      "how.wa.title": "WhatsApp group",
+      "how.wa.desc": "Quick announcements and interaction",
+
+      "project.title": "🎯 Final Project",
+      "project.name": "Task Manager in Python",
+      "project.p1": "By the end, you will build a <strong>task manager in Python</strong>, applying everything you learned.",
+      "project.p2": "This will be your <strong>first portfolio piece</strong>, with personalized feedback to help you grow.",
+      "project.featuresTitle": "Project features:",
+      "project.f1": "✅ Add tasks",
+      "project.f2": "✅ Mark as completed",
+      "project.f3": "✅ List pending tasks",
+      "project.f4": "✅ Save data to a file",
+      "project.f5": "✅ Friendly interface",
+
+      "pricing.title": "💰 Investment",
+      "pricing.plan": "Python Tutoring - Starter Plan",
+      "pricing.brl": "R$ 397",
+      "pricing.cad": "CAD 117",
+      "pricing.start": "<strong>⚡ Start:</strong> August 25, 2025",
+      "pricing.limited": "<strong>🚀 Limited seats</strong> to ensure individual attention",
+      "pricing.cta": "Reserve Your Spot!!",
+
+      "about.title": "👩‍🏫 About the instructor",
+      "about.role": "Professor & Computer Science PhD Candidate",
+      "about.p1": "I'm Marcela dos Santos, a teacher with over 14 years of experience in computing, teaching programming, logic, and technologies to different audiences—from beginner to advanced.",
+      "about.p2": "Currently, I'm a Computer Science PhD candidate in Canada, researching innovative solutions for software and robotics, and I’ve participated in educational projects with companies like Intel and Google.",
+      "about.p3": "Throughout my journey, I’ve taught in universities and courses in Brazil and Canada, always with the same mission: make learning technology accessible, practical, and motivating—even for those who have never programmed before.",
+      "about.p4": "My passion is seeing my students gain confidence, build autonomy, and create their first projects. That’s exactly what we’ll do together in the Python Tutoring – Starter Plan.",
+      "about.p5": "Here, you won’t just learn code. You’ll learn to think like a programmer—in a simple, applied way, with support from someone who truly believes in your potential. 🚀",
+      "about.linkedin": "Connect on LinkedIn",
+
+      "contact.title": "Reserve My Spot",
+      "contact.p1": "Fill out the application form and secure your seat in the next cohort!",
+      "contact.p2": "⚡ Limited seats to ensure individual attention<br>",
+      "contact.cta": "Fill Out the Application Form",
+
+      "footer.tagline": "Transforming lives through Python programming",
+      "footer.privacy": "Privacy Policy",
+      "footer.terms": "Terms of Use",
+      "footer.copy": "© 2024 Python Tutoring. All rights reserved."
+    }
+  };
+
+  // Função de tradução
+  function translatePage(lang) {
+    const root = document.documentElement;
+    root.setAttribute('lang', lang === 'en' ? 'en' : 'pt-BR');
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const html = I18N[lang]?.[key];
+      if (html != null) {
+        // Alguns textos possuem <strong>, então usamos innerHTML
+        el.innerHTML = html;
+      }
+    });
+
+    // Atualiza rótulos dos botões de idioma
+    const tgl = document.getElementById("langToggle");
+    const tglM = document.getElementById("langToggleMobile");
+    if (tgl) tgl.textContent = lang === "pt" ? "EN" : "PT";
+    if (tglM) tglM.textContent = lang === "pt" ? "EN" : "PT";
+
+    localStorage.setItem("site_lang", lang);
+  }
+
+  // Alternância
+  function toggleLang() {
+    const current = localStorage.getItem("site_lang") || "pt";
+    const next = current === "pt" ? "en" : "pt";
+    translatePage(next);
+  }
+
+  // Liga eventos
+  document.getElementById("langToggle")?.addEventListener("click", toggleLang);
+  document.getElementById("langToggleMobile")?.addEventListener("click", toggleLang);
+
+  // Inicializa idioma
+  const saved = localStorage.getItem("site_lang") || "pt";
+  translatePage(saved);
     </script>
 </body>
 </html>
