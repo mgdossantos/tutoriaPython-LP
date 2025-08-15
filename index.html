@@ -44,6 +44,11 @@
             <div id="mobileMenu" class="hidden md:hidden mt-4 space-y-2">
                 <a href="#sobre" class="block hover:text-yellow-300 transition-colors">Sobre a Professora</a>
                 <a href="#servicos" class="block hover:text-yellow-300 transition-colors">Conteúdo</a>
+              <!-- Botão de idioma no menu mobile -->
+                  <button id="langToggleMobile"
+                          class="mt-2 border border-white/50 px-3 py-1 rounded hover:bg-white hover:text-gray-900 transition-colors w-full text-left">
+                    EN
+                  </button>
             </div>
         </nav>
     </header>
@@ -53,9 +58,9 @@
         <div class="container mx-auto px-6 text-center">
             <div class="fade-in">
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                    <span class="text-yellow-300">Tutoria de Python</span> – Plano Básico
+                    <span class="text-yellow-300" data-i18n="hero.title.highlight">Tutoria de Python</span> – Plano Básico
                 </h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" data-i18n="hero.subtitle">
                     Aprenda programação do zero e crie seu primeiro projeto em 6 semanas
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
