@@ -1,646 +1,688 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comece do Zero e Domine o Básico de Python em 6 Semanas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .code-bg { background: linear-gradient(45deg, #1e3a8a 0%, #3730a3 100%); }
-        .hover-scale { transition: transform 0.3s ease; }
-        .hover-scale:hover { transform: scale(1.05); }
-        .fade-in { animation: fadeIn 0.8s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comece do Zero e Domine o Básico de Python em 6 Semanas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --main-bg: #fdf6e3;
+      --main-blue: #1e3a8a;
+      --main-red: #e74c3c;
+      --card-bg: #fff;
+      --border-radius: 1.5rem;
+      --shadow: 0 4px 28px rgba(30,58,138,0.10);
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--main-bg);
+      color: #0f172a;
+    }
+    html { scroll-behavior: smooth; }
+    /* Sutileza de textura */
+    .grain::before{
+      content:""; position:absolute; inset:0; pointer-events:none; opacity:.06;
+      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect fill="%231e3a8a" width="1" height="1" x="20" y="30"/><rect fill="%231e3a8a" width="1" height="1" x="120" y="80"/><rect fill="%231e3a8a" width="1" height="1" x="60" y="150"/></svg>');
+      background-size:180px 180px;
+    }
+    .fade-up{ animation:fadeUp .7s ease both; }
+    @keyframes fadeUp{ from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)} }
+    /* Cartões e componentes base */
+    .glass{
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(30,58,138,0.10);
+    }
+    .chip{
+      background: rgba(30,58,138,0.08);
+      color: var(--main-blue);
+      border-radius: 999px;
+    }
+    .title-accent{ color: var(--main-blue); }
+    /* Botões */
+    .btn-primary{
+      background: var(--main-red); color:#fff; font-weight:700; border-radius: .875rem;
+      transition: .2s ease; box-shadow: 0 6px 18px rgba(30,58,138,.18);
+    }
+    .btn-primary:hover{ background:#162a6b; }
+    .btn-ghost{
+      color: var(--main-blue); background: transparent; border:1px solid rgba(30,58,138,0.25);
+      border-radius: .875rem; font-weight:600; transition:.2s ease;
+    }
+    .btn-ghost:hover{ background: rgba(30,58,138,0.06); }
+    .btn-danger{ background: var(--main-red); color:#fff; }
+    .btn-danger:hover{ filter: brightness(.95); }
+    /* Barras e toasts */
+    .bar-track{ background: rgba(30,58,138,0.18); }
+    .bar-fill{ background: var(--main-blue); }
+    .toast-success{ background: var(--main-blue); color:#fff; }
+    /* Painel de código */
+    .code-panel{
+      background:#0f1a3a; color:#e5e7eb; border:1px solid rgba(30,58,138,0.25);
+    }
+    .code-panel pre, .code-panel code{ color:#e5e7eb; }
+    /* Inputs */
+    .input{
+      width:100%; background:#fff; color:#0f172a; border-radius:.875rem; padding:.6rem .75rem;
+      outline:none; border:1px solid rgba(30,58,138,0.20);
+      transition: box-shadow .2s ease, border-color .2s ease;
+    }
+    .input:focus{
+      border-color: var(--main-blue);
+      box-shadow: 0 0 0 4px rgba(30,58,138,0.18);
+    }
+    /* Links no rodapé */
+    .footer-link{ color:#334155; }
+    .footer-link:hover{ color: var(--main-blue); }
+  </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="gradient-bg text-white">
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <div class="text-2xl">🐍</div>
-                    <span class="text-xl font-bold">Python Tutoria</span>
-                </div>
-                <div class="hidden md:flex space-x-6">
-                    <a href="#sobre" class="hover:text-yellow-300 transition-colors" data-i18n="nav.about">Sobre a Professora</a>
-                    <a href="#servicos" class="hover:text-yellow-300 transition-colors" data-i18n="nav.content">Conteúdo</a>
-                <!-- Seletor de idioma -->
-                <button id="langToggle"
-                        class="ml-4 border border-white/50 px-3 py-1 rounded hover:bg-white hover:text-gray-900 transition-colors"
-                        aria-label="Change language">
-                  EN
-                </button>
-                </div>
-                <button id="menuBtn" class="md:hidden">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-            <div id="mobileMenu" class="hidden md:hidden mt-4 space-y-2">
-                <a href="#sobre" class="block hover:text-yellow-300 transition-colors">Sobre a Professora</a>
-                <a href="#servicos" class="block hover:text-yellow-300 transition-colors">Conteúdo</a>
-              <!-- Botão de idioma no menu mobile -->
-                  <button id="langToggleMobile"
-                          class="mt-2 border border-white/50 px-3 py-1 rounded hover:bg-white hover:text-gray-900 transition-colors w-full text-left">
-                    EN
-                  </button>
-            </div>
-        </nav>
-    </header>
+<body class="relative overflow-x-hidden">
+  <div class="grain absolute inset-0"></div>
 
-    <!-- Hero Section -->
-        <section class="gradient-bg text-white py-20">
-      <div class="container mx-auto px-6 text-center">
-        <div class="fade-in">
-          <h1 class="text-4xl md:text-6xl font-bold mb-6">
-            <span class="text-yellow-300" data-i18n="hero.title.highlight">Tutoria de Python</span>
-            <span data-i18n="hero.title.suffix"> – Plano Básico</span>
-          </h1>
-          <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto" data-i18n="hero.subtitle">
-            Aprenda programação do zero e crie seu primeiro projeto em 6 semanas
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onclick="openGoogleForm()"
-                    class="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-300 transition-colors hover-scale"
-                    data-i18n="hero.ctaPrimary">
-              Faça sua Pré-Inscrição para a Turma 2
-            </button>
-            <button onclick="scrollToSection('servicos')"
-                    class="border-2 border-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-gray-900 transition-colors"
-                    data-i18n="hero.ctaSecondary">
-              Saiba Mais
-            </button>
+  <!-- Header -->
+  <header class="relative z-10">
+    <nav class="max-w-7xl mx-auto px-6 lg:px-8 py-5">
+      <div class="flex items-center justify-between">
+        <a href="#top" class="group inline-flex items-center gap-3" aria-label="Início">
+          <div class="w-10 h-10 rounded-xl grid place-items-center bg-[var(--main-blue)] text-white font-black text-xl shadow-lg">🐍</div>
+          <div>
+            <p class="text-lg font-extrabold tracking-tight title-accent">Python Básico</p>
+            <p class="text-xs text-slate-600 -mt-1">Do zero ao seu 1º projeto</p>
+          </div>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#sobre" class="text-slate-700 hover:text-[var(--main-blue)] transition" data-i18n="nav.about">Sobre</a>
+          <a href="#conteudo" class="text-slate-700 hover:text-[var(--main-blue)] transition" data-i18n="nav.content">Conteúdo</a>
+          <a href="#depoimentos" class="text-slate-700 hover:text-[var(--main-blue)] transition" data-i18n="nav.testimonials">Depoimentos</a>
+          <a href="#preco" class="text-slate-700 hover:text-[var(--main-blue)] transition" data-i18n="nav.pricing">Preço</a>
+          <a href="#faq" class="text-slate-700 hover:text-[var(--main-blue)] transition">FAQ</a>
+          <button id="langToggle" class="btn-ghost px-3.5 py-2 text-sm" aria-label="Mudar idioma">EN</button>
+<button
+  id="openFormHero"
+  class="btn-primary px-4 py-2"
+  data-i18n="hero.ctaPrimary"
+  onclick="openGoogleForm()"
+>
+  Pré-inscrição
+</button>        </div>
+
+        <div class="md:hidden flex items-center gap-3">
+          <button id="langToggleMobile" class="btn-ghost px-3 py-2 text-sm" aria-label="Mudar idioma">EN</button>
+          <button id="menuBtn" class="btn-ghost p-2" aria-label="Abrir menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden mt-4 glass rounded-xl p-4 space-y-3">
+        <a href="#sobre" class="block hover:text-[var(--main-blue)] transition" data-i18n="nav.about">Sobre</a>
+        <a href="#conteudo" class="block hover:text-[var(--main-blue)] transition" data-i18n="nav.content">Conteúdo</a>
+        <a href="#depoimentos" class="block hover:text-[var(--main-blue)] transition" data-i18n="nav.testimonials">Depoimentos</a>
+        <a href="#preco" class="block hover:text-[var(--main-blue)] transition" data-i18n="nav.pricing">Preço</a>
+        <a href="#faq" class="block hover:text-[var(--main-blue)] transition">FAQ</a>
+        <button id="openModalCtaMobile" class="w-full btn-primary px-4 py-2" data-i18n="hero.ctaPrimary">Pré‑inscrição</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section id="top" class="relative z-10 pt-10 md:pt-16 pb-12 md:pb-20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-10 items-center">
+      <div class="fade-up">
+        <div class="inline-flex items-center gap-2 chip px-3 py-1.5 text-xs mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--main-blue)]"></span>
+          <span data-i18n="badge.nextCohort">Turma 2 abrindo inscrições</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
+          <span class="title-accent" data-i18n="hero.title.highlight">Tutoria de Python</span>
+          <span class="block text-slate-700" data-i18n="hero.title.suffix">Plano Básico • 6 semanas</span>
+        </h1>
+        <p class="mt-5 text-slate-700 text-lg md:text-xl max-w-xl" data-i18n="hero.subtitle">
+          Aprenda programação do zero e crie seu primeiro projeto guiado, com encontros ao vivo e feedback individual.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+        <button
+          id="openFormHero2"
+          class="btn-primary px-4 py-2"
+          data-i18n="hero.ctaPrimary"
+          onclick="openGoogleForm()">
+          Faça sua Pré-inscrição
+        </button>
+          <a href="#conteudo" class="btn-ghost px-6 py-3" data-i18n="hero.ctaSecondary">Ver programa do curso</a>
+        </div>
+
+        <div class="mt-8 grid grid-cols-3 gap-4 max-w-lg">
+          <div class="glass p-4">
+            <p class="text-2xl font-extrabold title-accent">6</p>
+            <p class="text-xs text-slate-600" data-i18n="stats.weeks">semanas</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-2xl font-extrabold title-accent">100%</p>
+            <p class="text-xs text-slate-600" data-i18n="stats.beginner">para iniciantes</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-2xl font-extrabold title-accent">1 projeto</p>
+            <p class="text-xs text-slate-600" data-i18n="stats.project">do início ao fim</p>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Para Quem É Section -->
-    <section class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-i18n="who.title">📌 Para quem é essa tutoria?</h2>
+      <div class="relative fade-up">
+        <div class="glass rounded-2xl p-6 md:p-8">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-[var(--main-blue)]/10 text-[var(--main-blue)] grid place-items-center text-xl">▶️</div>
+            <p class="font-semibold" data-i18n="hero.demoTitle">Demonstração de aulas e projeto</p>
+          </div>
+          <div class="mt-5 rounded-xl overflow-hidden">
+            <div class="code-panel p-4 text-sm font-mono rounded-xl">
+<pre><code>def saudacao(nome):
+    return f"Olá, {nome}! 👋"
+
+for aluno in ["Raphaela", "Debora"]:
+    print(saudacao(aluno))</code></pre>
             </div>
-
-            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-                    <div class="text-3xl mb-4">🎯</div>
-                        <p class="text-gray-700 text-lg" data-i18n="who.card1">
-                          Para quem <strong>nunca programou</strong> e quer aprender de forma prática
-                        </p>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-                    <div class="text-3xl mb-4">🔄</div>
-                    <p class="text-gray-700 text-lg" data-i18n="who.card2">Para quem já <strong>tentou estudar sozinho</strong>, mas se perdeu no caminho</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-                    <div class="text-3xl mb-4">💼</div>
-                    <p class="text-gray-700 text-lg" data-i18n="who.card3">Para quem quer ter um <strong>projeto pronto</strong> para mostrar no portfólio</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg hover-scale">
-                    <div class="text-3xl mb-4">🚪</div>
-                    <p class="text-gray-700 text-lg" data-i18n="who.card4">Para quem quer entender a <strong>lógica de programação</strong> e abrir portas para análise de dados, automação e IA</p>
-                </div>
-            </div>
+          </div>
+          <p class="mt-4 text-sm text-slate-600" data-i18n="hero.demoNote">Você aprenderá a escrever, executar e entender cada linha.</p>
         </div>
-    </section>
-
-    <!-- O que você vai aprender Section -->
-    <section id="servicos" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-i18n="learn.title">🚀 O que você vai aprender</h2>
-                <p class="text-xl text-gray-600"data-i18n="learn.subtitle">Em 6 semanas, você vai dominar:</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="bg-gray-50 p-6 rounded-lg hover-scale">
-                    <div class="text-3xl mb-4">🔤</div>
-                    <h3 class="text-lg font-semibold mb-3 text-gray-800" data-i18n="learn.item1.title">Fundamentos do Python</h3>
-                    <p class="text-gray-600"data-i18n="learn.item1.desc">Sintaxe, variáveis, operadores</p>
-                </div>
-
-                <div class="bg-gray-50 p-6 rounded-lg hover-scale">
-                    <div class="text-3xl mb-4">🤔</div>
-                    <h3 class="text-lg font-semibold mb-3 text-gray-800" data-i18n="learn.item2.title">Estruturas de decisão</h3>
-                    <p class="text-gray-600"data-i18n="learn.item2.desc">if, else, elif</p>
-                </div>
-
-                <div class="bg-gray-50 p-6 rounded-lg hover-scale">
-                    <div class="text-3xl mb-4">🔄</div>
-                    <h3 class="text-lg font-semibold mb-3 text-gray-800" data-i18n="learn.item3.title">Laços de repetição</h3>
-                    <p class="text-gray-600" data-i18n="learn.item3.desc">for, while</p>
-                </div>
-
-                <div class="bg-gray-50 p-6 rounded-lg hover-scale">
-                    <div class="text-3xl mb-4">⚙️</div>
-                    <h3 class="text-lg font-semibold mb-3 text-gray-800" data-i18n="learn.item4.title">Funções</h3>
-                    <p class="text-gray-600" data-i18n="learn.item4.desc">Como criar e reutilizar código</p>
-                </div>
-
-                <div class="bg-gray-50 p-6 rounded-lg hover-scale">
-                    <div class="text-3xl mb-4">📊</div>
-                    <h3 class="text-lg font-semibold mb-3 text-gray-800" data-i18n="learn.item5.title">Manipulação de dados</h3>
-                    <p class="text-gray-600" data-i18n="learn.item5.desc">Listas, dicionários e strings</p>
-                </div>
-
-                <div class="bg-gray-50 p-6 rounded-lg hover-scale">
-                    <div class="text-3xl mb-4">🎯</div>
-                    <h3 class="text-lg font-semibold mb-3 text-gray-800"data-i18n="learn.item6.title">Projeto final</h3>
-                    <p class="text-gray-600" data-i18n="learn.item6.desc">Desenvolvimento do seu projeto</p>
-                </div>
-            </div>
+        <div class="absolute -top-6 -right-6">
+          <div class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--main-blue)] text-white shadow" aria-hidden="true">Ao vivo + suporte</div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Como funciona Section -->
-    <section class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-i18n="how.title">📂 Como funciona</h2>
-            </div>
-
-            <div class="max-w-4xl mx-auto space-y-6">
-                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 hover-scale">
-                    <div class="text-3xl">📅</div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800" data-i18n="how.live.title">6 encontros ao vivo</h3>
-                        <p class="text-gray-600" data-i18n="how.live.desc">2 horas cada encontro</p>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 hover-scale">
-                    <div class="text-3xl">💪</div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800"data-i18n="how.ex.title">Exercícios práticos</h3>
-                        <p class="text-gray-600"data-i18n="how.ex.desc">Toda semana para fixar o conteúdo</p>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 hover-scale">
-                    <div class="text-3xl">📹</div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800" data-i18n="how.rec.title">Gravação das aulas</h3>
-                        <p class="text-gray-600"data-i18n="how.rec.desc">Para você rever quando quiser</p>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 hover-scale">
-                    <div class="text-3xl">🎯</div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800" data-i18n="how.proj.title">Projeto final</h3>
-                        <p class="text-gray-600" data-i18n="how.proj.desc">Com feedback individual</p>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 hover-scale">
-                    <div class="text-3xl">💬</div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800" data-i18n="how.wa.title">Grupo no WhatsApp</h3>
-                        <p class="text-gray-600"data-i18n="how.wa.desc">Para avisos e interação rápida</p>
-                    </div>
-                </div>
-            </div>
+  <!-- Benefits -->
+  <section class="relative z-10 py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-extrabold title-accent" data-i18n="benefits.title">Por que este programa funciona</h2>
+      <div class="mt-8 grid md:grid-cols-3 gap-6">
+        <div class="glass p-6">
+          <div class="w-10 h-10 rounded-lg bg-[var(--main-blue)]/10 text-[var(--main-blue)] grid place-items-center text-2xl">🧭</div>
+          <h3 class="mt-4 font-bold">Trilha guiada</h3>
+          <p class="text-slate-700 text-sm" data-i18n="benefits.guided.desc">Passo a passo claro do zero até seu primeiro projeto.</p>
         </div>
-    </section>
-
-    <!-- Projeto Final Section -->
-    <section class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4"  data-i18n="project.title">🎯 Projeto Final</h2>
-            </div>
-
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-lg">
-                    <div class="text-center mb-8">
-                        <div class="text-6xl mb-4">📝</div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4" data-i18n="project.name">Gerenciador de Tarefas em Python</h3>
-                    </div>
-
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div>
-                            <p class="text-gray-700 text-lg leading-relaxed mb-6"data-i18n="project.p1">
-                                No final da tutoria, você vai criar um <strong>gerenciador de tarefas em Python</strong>,
-                                aplicando tudo o que aprendeu.
-                            </p>
-                            <p class="text-gray-700 text-lg leading-relaxed"data-i18n="project.p2">
-                                Esse projeto vai ser seu <strong>primeiro item de portfólio</strong>, com feedback
-                                personalizado para você evoluir ainda mais.
-                            </p>
-                        </div>
-
-                        <div class="bg-white p-6 rounded-lg shadow-lg">
-                            <h4 class="font-semibold text-gray-800 mb-4"data-i18n="project.featuresTitle">Funcionalidades do projeto:</h4>
-                                <ul class="space-y-2 text-gray-600">
-                                <li data-i18n="project.f1">✅ Adicionar tarefas</li>
-                                <li data-i18n="project.f2">✅ Marcar como concluída</li>
-                                <li data-i18n="project.f3">✅ Listar tarefas pendentes</li>
-                                <li data-i18n="project.f4">✅ Salvar dados em arquivo</li>
-                                <li data-i18n="project.f5">✅ Interface amigável</li>
-                                </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="glass p-6">
+          <div class="w-10 h-10 rounded-lg bg-[var(--main-blue)]/10 text-[var(--main-blue)] grid place-items-center text-2xl">💬</div>
+          <h3 class="mt-4 font-bold" data-i18n="benefits.feedback.title">Feedback real</h3>
+          <p class="text-slate-700 text-sm" data-i18n="benefits.feedback.desc">Correções e dicas práticas diretamente no seu código.</p>
         </div>
-    </section>
-
-    <!-- Investimento Section -->
-    <section class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4" data-i18n="pricing.title">💰 Investimento</h2>
-            </div>
-
-            <div class="max-w-2xl mx-auto">
-                <div class="bg-white p-8 rounded-lg shadow-lg text-center hover-scale">
-                    <div class="mb-6">
-                        <div class="text-4xl mb-4">🎓</div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4" data-i18n="pricing.plan">Tutoria de Python - Plano Básico</h3>
-                    </div>
-
-                    <div class="space-y-4 mb-8">
-                        <div class="flex justify-center items-center space-x-4">
-                            <span class="text-2xl">🇧🇷</span>
-                            <span class="text-3xl font-bold text-blue-600" data-i18n="pricing.brl">R$ 468</span>
-                        </div>
-                        <div class="flex justify-center items-center space-x-4">
-                            <span class="text-2xl">🇨🇦</span>
-                            <span class="text-3xl font-bold text-blue-600"  data-i18n="pricing.cad">CAD 137</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 mb-8 text-gray-600">
-                        <p data-i18n="pricing.start"><strong>⚡ Início:</strong> 06 de Outubro de 2025</p>
-                        <p data-i18n="pricing.limited"><strong>🚀 Vagas limitadas</strong> para garantir atenção individual a cada aluno</p>
-                    </div>
-
-                    <button onclick="openGoogleForm()" class="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-300 transition-colors hover-scale" data-i18n="pricing.cta">>
-                         Faça sua Pré-Inscrição para a Turma 2
-                    </button>
-                </div>
-            </div>
+        <div class="glass p-6">
+          <div class="w-10 h-10 rounded-lg bg-[var(--main-blue)]/10 text-[var(--main-blue)] grid place-items-center text-2xl">⏱️</div>
+          <h3 class="mt-4 font-bold" data-i18n="benefits.short.title">6 semanas</h3>
+          <p class="text-slate-700 text-sm" data-i18n="benefits.short.desc">Objetivo claro com tempo definido para manter o foco.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-
-    <!-- Sobre a Professora Section -->
-    <section id="sobre" class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8" data-i18n="about.title">👩‍🏫 Sobre a professora</h2>
-
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="flex flex-col items-center mb-8">
-                        <img src="./images/marcela.jpg" alt="Marcela dos Santos" class="w-32 h-32 rounded-full object-cover shadow-lg mb-4 border-4 border-blue-100">
-                        <div class="text-center">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">Marcela dos Santos</h3>
-                            <p class="text-blue-600 font-medium" data-i18n="about.role">Professora & Doutoranda em Ciência da Computação</p>
-                        </div>
-                    </div>
-
-                    <p class="text-gray-700 text-lg leading-relaxed mb-6" data-i18n="about.p1">
-                        Sou Marcela dos Santos, professora há mais de 14 anos na área de computação, com experiência ensinando programação, lógica e tecnologias para diferentes públicos, do iniciante ao avançado.
-                    </p>
-
-                    <p class="text-gray-700 text-lg leading-relaxed mb-6" data-i18n="about.p2">
-                        Atualmente, sou doutoranda em Ciência da Computação no Canadá, pesquisando soluções inovadoras para software e robótica, e já participei de projetos educacionais com grandes empresas como Intel e Google.
-                    </p>
-
-                   <p class="text-gray-700 text-lg leading-relaxed mb-6" data-i18n="about.p3">
-                        Ao longo da minha trajetória, ensinei em universidades e cursos no Brasil e no Canadá, sempre com a mesma missão: tornar o aprendizado de tecnologia acessível, prático e motivador — mesmo para quem nunca programou antes.
-                   </p>
-
-
-                   <p class="text-gray-700 text-lg leading-relaxed mb-6" data-i18n="about.p4">
-                        Minha paixão é ver meus alunos ganhando confiança, conquistando autonomia e criando seus primeiros projetos. E é exatamente isso que vamos fazer juntos na Tutoria de Python – Plano Básico.
-                   </p>
-
-                    <p class="text-gray-700 text-lg leading-relaxed mb-6" data-i18n="about.p5">
-                        Aqui, você não vai só aprender código. Você vai aprender a pensar como programador(a), de forma simples, aplicada e com o apoio de quem realmente acredita no seu potencial. 🚀
-                    </p>
-
-                    <div class="flex justify-center">
-                        <a href="https://www.linkedin.com/in/marceladossantos/" target="_blank" class="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors hover-scale">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span>Conecte-se no LinkedIn</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+  <!-- Program -->
+  <section id="conteudo" class="relative z-10 py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-end justify-between gap-6">
+        <h2 class="text-2xl md:text-3xl font-extrabold title-accent" data-i18n="program.title">Programa em 6 semanas</h2>
+        <a href="#preco" class="hidden md:inline-flex btn-ghost px-4 py-2" data-i18n="program.cta">Garantir minha vaga</a>
+      </div>
+      <div class="mt-8 grid lg:grid-cols-3 gap-6">
+        <div class="glass p-6">
+          <h3 class="font-bold title-accent">Semana 1</h3>
+          <p class="text-sm mt-1" data-i18n="program.w1">Fundamentos, variáveis, tipos, input/output.</p>
+          <div class="mt-4 text-xs text-slate-600 "><strong>Entregável 1 — Briefing & Protótipo do Menu (setup do projeto)</strong></div>
         </div>
-    </section>
-
-    <!-- Contato Section -->
-    <section id="contato" class="py-20 code-bg text-white">
-        <div class="container mx-auto px-6">
-            <div class="max-w-2xl mx-auto">
-                <div class="bg-white/10 p-8 rounded-lg backdrop-blur-sm text-center">
-                    <h3 class="text-2xl font-semibold mb-6"data-i18n="contact.title">Garantir Minha Vaga</h3>
-                    <div class="space-y-6">
-                        <div class="text-4xl mb-4">📝</div>
-                        <p class="text-lg mb-6" data-i18n="contact.p1">
-                            Preencha o formulário de pré-inscrição e garante sua vaga na próxima Turma 2!
-                        </p>
-                        <p class="text-gray-300 mb-8" data-i18n="contact.p2">
-                            ⚡ Vagas limitadas para garantir atenção individual<br>
-                        </p>
-
-                        <button onclick="openGoogleForm()" class="w-full bg-yellow-400 text-gray-900 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-300 transition-colors hover-scale" data-i18n="contact.cta">
-                             Faça sua Pré-Inscrição para a Turma 2
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="glass p-6">
+          <h3 class="font-bold title-accent">Semana 2</h3>
+          <p class="text-sm mt-1" data-i18n="program.w2">Estruturas de Decisão</p>
+          <div class="mt-4 text-xs text-slate-600"><strong>Entregável 2 — Cadastro/Status de Tarefas (condicionais)</strong></div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="text-center">
-                <div class="flex items-center justify-center space-x-2 mb-4">
-                    <div class="text-2xl">🐍</div>
-                    <span class="text-xl font-bold">Python Tutoria</span>
-                </div>
-                <p class="text-gray-400 mb-6" data-i18n="footer.tagline">Transformando vidas através da programação Python</p>
-                <div class="flex justify-center space-x-6 mb-6">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors" data-i18n="footer.privacy">Política de Privacidade</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors" data-i18n="footer.terms">Termos de Uso</a>
-                </div>
-                <p class="text-gray-500" data-i18n="footer.copy">&copy; 2024 Python Tutoria. Todos os direitos reservados.</p>
-            </div>
+        <div class="glass p-6">
+          <h3 class="font-bold title-accent">Semana 3</h3>
+          <p class="text-sm mt-1" data-i18n="program.w3">Laços de Repetição</p>
+          <div class="mt-4 text-xs text-slate-600"><strong>Entregável 3 — Ciclo de Uso e Validações (loops)</strong></div>
         </div>
-    </footer>
+        <div class="glass p-6">
+          <h3 class="font-bold title-accent">Semana 4</h3>
+          <p class="text-sm mt-1" data-i18n="program.w4">Funções</p>
+          <div class="mt-4 text-xs text-slate-600"><strong>Entregável 4 — Modularização com Funções (arquitetura básica)</strong></div>
+        </div>
+        <div class="glass p-6">
+          <h3 class="font-bold title-accent">Semana 5</h3>
+          <p class="text-sm mt-1" data-i18n="program.w5">Listas, Dicionários e Manipulação de Strings</p>
+          <div class="mt-4 text-xs text-slate-600"><strong>Entregável 5 — Persistência & Relatórios (listas/dicionários + strings)</strong></div>
+        </div>
+        <div class="glass p-6">
+          <h3 class="font-bold title-accent">Semana 6</h3>
+          <p class="text-sm mt-1" data-i18n="program.w6"> Finalização do Projeto e Continuação da Jornada</p>
+          <div class="mt-4 text-xs text-slate-600"><strong>Entregável Final — Demo, README e Checklist de Qualidade</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script>
-        // Menu mobile toggle
-        document.getElementById('menuBtn').addEventListener('click', function() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('hidden');
-        });
+  <!-- About -->
+  <section id="sobre" class="relative z-10 py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
+      <div class="glass p-6 md:p-8">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-xl bg-[var(--main-blue)] text-white grid place-items-center text-2xl">👩‍🏫</div>
+          <div>
+            <h3 class="font-extrabold text-xl title-accent" data-i18n="about.title">Sua professora</h3>
+            <p class="text-slate-600 text-sm" data-i18n="about.subtitle">Doutoranda emComputação • +10 anos ensinando</p>
+          </div>
+        </div>
+        <p class="mt-5 text-slate-700" data-i18n="about.text">
+          Olá! Eu ajudo iniciantes a começarem com programação de forma prática e confiante.
+          Você terá encontros ao vivo, materiais objetivos e feedback direto para evoluir do zero ao seu primeiro projeto.
+        </p>
+        <ul class="mt-5 space-y-2 text-slate-700 text-sm">
+          <li>• <span data-i18n="about.point1">Aulas ao vivo gravadas</span></li>
+          <li>• <span data-i18n="about.point2">Suporte rápido em comunidade</span></li>
+          <li>• <span data-i18n="about.point3">Roteiro claro e sem enrolação</span></li>
+        </ul>
+      </div>
+      <div class="grid gap-6">
+        <div class="glass p-6">
+          <h4 class="font-bold title-accent" data-i18n="outcomes.title">Você sairá sabendo</h4>
+          <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm text-slate-700">
+            <div class="flex items-center gap-2"><span>✅</span><span data-i18n="outcomes.o1">Lógica e estruturas básicas</span></div>
+            <div class="flex items-center gap-2"><span>✅</span><span data-i18n="outcomes.o2">Escrever funções reutilizáveis</span></div>
+            <div class="flex items-center gap-2"><span>✅</span><span data-i18n="outcomes.o3">Trabalhar com arquivos</span></div>
+            <div class="flex items-center gap-2"><span>✅</span><span data-i18n="outcomes.o4">Finalizar um projeto próprio</span></div>
+          </div>
+        </div>
+        <div class="glass p-6">
+          <h4 class="font-bold title-accent" data-i18n="extras.title">Extras incluídos</h4>
+          <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm text-slate-700">
+            <div class="flex items-center gap-2"><span>🎯</span><span data-i18n="extras.e1">Checklist de estudos</span></div>
+            <div class="flex items-center gap-2"><span>📚</span><span data-i18n="extras.e2">Material de apoio</span></div>
+            <div class="flex items-center gap-2"><span>🧪</span><span data-i18n="extras.e3">Exercícios práticos</span></div>
+            <div class="flex items-center gap-2"><span>💡</span><span data-i18n="extras.e4">Ideias de projetos</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Smooth scroll function
-        function scrollToSection(sectionId) {
-            document.getElementById(sectionId).scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
 
-        // WhatsApp integration
-        function openWhatsApp(plano) {
-            const message = `Olá! Tenho interesse no plano Python ${plano}. Gostaria de saber mais informações sobre as aulas.`;
-            const whatsappUrl = `https://wa.me/5511999999999?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
+  <!-- Pricing -->
+  <!-- Pricing + FAQ lado a lado -->
+  <section id="preco" class="relative z-10 py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-extrabold title-accent" data-i18n="pricing.title">Preço e vagas</h2>
 
-        // Google Form integration
-        function openGoogleForm() {
-            window.open('https://forms.gle/wtr1b8UA2jUnMkN66', '_blank');
-        }
+      <div class="mt-8 grid md:grid-cols-2 gap-6">
+        <!-- Coluna: Investimento -->
+        <div class="glass p-6 md:p-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--main-blue)] text-white text-xs font-bold">Básico</div>
+          <p class="mt-4 text-4xl font-extrabold title-accent">R$ 468 ou CAD 117</p>
 
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+          <ul class="mt-4 space-y-2 text-slate-800">
+            <li>✅ <span data-i18n="pricing.f1">6 encontros ao vivo (1x por semana)</span></li>
+            <li>✅ <span data-i18n="pricing.f2">Acesso às gravações</span></li>
+            <li>✅ <span data-i18n="pricing.f3">Feedback no projeto final</span></li>
+            <li>✅ <span data-i18n="pricing.f4">Comunidade para dúvidas</span></li>
+          </ul>
 
-                // Close mobile menu if open
-                document.getElementById('mobileMenu').classList.add('hidden');
-            });
-        });
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+<button
+  id="openFormHero3"
+  class="btn-primary px-4 py-2"
+  data-i18n="hero.ctaPrimary"
+  onclick="openGoogleForm()"
+>
+  Pré-inscrição
+</button>          </div>
 
-        // Add scroll effect to navbar
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.classList.add('shadow-lg');
-            } else {
-                header.classList.remove('shadow-lg');
-            }
-        });
-          // Dicionário PT/EN
-  const I18N = {
-    pt: {
-      brand: "Python Tutoria",
-      "nav.about": "Sobre a Professora",
-      "nav.content": "Conteúdo",
-      "hero.title.highlight": "Tutoria de Python",
-      "hero.title.suffix": " – Plano Básico",
-      "hero.subtitle": "Aprenda programação do zero e crie seu primeiro projeto em 6 semanas",
-      "hero.ctaPrimary": " Faça sua Pré-Inscrição para a Turma 2",
-      "hero.ctaSecondary": "Saiba Mais",
+          <p class="text-xs text-slate-600 mt-3" data-i18n="pricing.disclaimer">
+            Após preencher o formulário, você receberá as informações para o pagamento.
+          </p>
+        </div>
 
-      "who.title": "📌 Para quem é essa tutoria?",
-      "who.card1": "Para quem <strong>nunca programou</strong> e quer aprender de forma prática",
-      "who.card2": "Para quem já <strong>tentou estudar sozinho</strong>, mas se perdeu no caminho",
-      "who.card3": "Para quem quer ter um <strong>projeto pronto</strong> para mostrar no portfólio",
-      "who.card4": "Para quem quer entender a <strong>lógica de programação</strong> e abrir portas para análise de dados, automação e IA",
+        <!-- Coluna: FAQ (mantém o âncora #faq) -->
+        <div id="faq" class="glass p-6 md:p-8">
+          <h3 class="text-xl md:text-2xl font-extrabold title-accent">FAQ</h3>
+          <div class="mt-6 space-y-3">
+            <details class="glass p-4 group">
+              <summary class="cursor-pointer font-semibold list-none flex items-center justify-between">
+                <span data-i18n="faq.q1">Preciso saber programar?</span>
+                <span class="text-slate-500 group-open:rotate-180 transition">⌄</span>
+              </summary>
+              <p class="mt-2 text-slate-700 text-sm" data-i18n="faq.a1">Não! O curso começa do zero e evolui no ritmo certo.</p>
+            </details>
 
-      "learn.title": "🚀 O que você vai aprender",
-      "learn.subtitle": "Em 6 semanas, você vai dominar:",
-      "learn.item1.title": "Fundamentos do Python",
-      "learn.item1.desc": "Sintaxe, variáveis, operadores",
-      "learn.item2.title": "Estruturas de decisão",
-      "learn.item2.desc": "if, else, elif",
-      "learn.item3.title": "Laços de repetição",
-      "learn.item3.desc": "for, while",
-      "learn.item4.title": "Funções",
-      "learn.item4.desc": "Como criar e reutilizar código",
-      "learn.item5.title": "Manipulação de dados",
-      "learn.item5.desc": "Listas, dicionários e strings",
-      "learn.item6.title": "Projeto final",
-      "learn.item6.desc": "Desenvolvimento do seu projeto",
+            <details class="glass p-4 group">
+              <summary class="cursor-pointer font-semibold list-none flex items-center justify-between">
+                <span data-i18n="faq.q2">As aulas são ao vivo?</span>
+                <span class="text-slate-500 group-open:rotate-180 transition">⌄</span>
+              </summary>
+              <p class="mt-2 text-slate-700 text-sm" data-i18n="faq.a2">Sim, com gravações disponíveis no dia seguinte.</p>
+            </details>
 
-      "how.title": "📂 Como funciona",
-      "how.live.title": "6 encontros ao vivo",
-      "how.live.desc": "2 horas cada encontro",
-      "how.ex.title": "Exercícios práticos",
-      "how.ex.desc": "Toda semana para fixar o conteúdo",
-      "how.rec.title": "Gravação das aulas",
-      "how.rec.desc": "Para você rever quando quiser",
-      "how.proj.title": "Projeto final",
-      "how.proj.desc": "Com feedback individual",
-      "how.wa.title": "Grupo no WhatsApp",
-      "how.wa.desc": "Para avisos e interação rápida",
+            <details class="glass p-4 group">
+              <summary class="cursor-pointer font-semibold list-none flex items-center justify-between">
+                <span data-i18n="faq.q3">Como tiro dúvidas?</span>
+                <span class="text-slate-500 group-open:rotate-180 transition">⌄</span>
+              </summary>
+              <p class="mt-2 text-slate-700 text-sm" data-i18n="faq.a3">Você terá uma comunidade e momentos dedicados a perguntas.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      "project.title": "🎯 Projeto Final",
-      "project.name": "Gerenciador de Tarefas em Python",
-      "project.p1": "No final da tutoria, você vai criar um <strong>gerenciador de tarefas em Python</strong>, aplicando tudo o que aprendeu.",
-      "project.p2": "Esse projeto vai ser seu <strong>primeiro item de portfólio</strong>, com feedback personalizado para você evoluir ainda mais.",
-      "project.featuresTitle": "Funcionalidades do projeto:",
-      "project.f1": "✅ Adicionar tarefas",
-      "project.f2": "✅ Marcar como concluída",
-      "project.f3": "✅ Listar tarefas pendentes",
-      "project.f4": "✅ Salvar dados em arquivo",
-      "project.f5": "✅ Interface amigável",
+  <!-- Footer -->
+  <footer class="relative z-10 border-t border-[rgba(30,58,138,0.15)]">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg grid place-items-center bg-[var(--main-blue)] text-white text-lg font-black">🐍</div>
+        <div class="text-slate-600 text-sm">Python Tutoria • 2025</div>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+<!--        <a href="https://example.com" target="_blank" rel="noopener noreferrer" class="footer-link">Site</a>-->
+        <a href="https://www.instagram.com/marceladossantos.prof/;" target="_blank" rel="noopener noreferrer" class="footer-link">Instagram</a>
+        <a href="https://www.youtube.com/MarcelaDosSantos" target="_blank" rel="noopener noreferrer" class="footer-link">YouTube</a>
+      </div>
+    </div>
+  </footer>
 
-      "pricing.title": "💰 Investimento",
-      "pricing.plan": "Tutoria de Python - Plano Básico",
-      "pricing.preinscricao": "Pré-Inscrição Turma 2",
-      "pricing.brl": "R$ 468",
-      "pricing.cad": "CAD 137",
-      "pricing.start": "<strong>⚡ Início:</strong> 06 de Outubro 2025",
-      "pricing.limited": "<strong>🚀 Vagas limitadas</strong> para garantir atenção individual a cada aluno",
-      "pricing.cta": "Pré-Inscrição Turma 2!!",
+  <!-- Modal -->
+  <div id="modalOverlay" class="hidden fixed inset-0 z-50 bg-black/40"></div>
+  <div id="modal" class="hidden fixed inset-0 z-50 grid place-items-center px-6">
+    <div class="w-full max-w-lg glass p-6 md:p-8 relative">
+      <button id="closeModal" class="btn-ghost absolute top-3 right-3 px-3 py-1 text-sm" aria-label="Fechar">✕</button>
+      <h3 class="text-2xl font-extrabold title-accent" data-i18n="form.title">Pré‑inscrição</h3>
+      <p class="text-slate-700 mt-1 text-sm" data-i18n="form.subtitle">Preencha e eu retorno com os próximos passos.</p>
+      <form id="preForm" class="mt-5 space-y-4">
+        <div>
+          <label for="nome" class="block text-sm mb-1" data-i18n="form.nameLabel">Seu nome</label>
+          <input id="nome" name="nome" required class="input" placeholder="Seu nome"/>
+        </div>
+        <div>
+          <label for="email" class="block text-sm mb-1">Email</label>
+          <input id="email" name="email" type="email" required class="input" placeholder="voce@email.com"/>
+        </div>
+        <div>
+          <label for="objetivo" class="block text-sm mb-1" data-i18n="form.goalLabel">Seu objetivo</label>
+          <select id="objetivo" name="objetivo" class="input">
+            <option data-i18n="form.goal1">Primeiro contato com programação</option>
+            <option data-i18n="form.goal2">Mudar de carreira</option>
+            <option data-i18n="form.goal3">Projeto pessoal</option>
+          </select>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+          <button type="submit" class="btn-primary px-5 py-3" data-i18n="form.submit">Enviar interesse</button>
+          <button type="button" id="openFormExternal2" class="btn-ghost px-5 py-3 font-semibold" data-i18n="form.alt">Abrir Google Form</button>
+        </div>
+        <p class="text-xs text-slate-600" data-i18n="form.note">Este é um envio de demonstração (sem servidor). Você verá uma confirmação.</p>
+      </form>
+    </div>
+  </div>
 
-      "about.title": "👩‍🏫 Sobre a professora",
-      "about.role": "Professora & Doutoranda em Ciência da Computação",
-      "about.p1": "Sou Marcela dos Santos, professora há mais de 14 anos na área de computação, com experiência ensinando programação, lógica e tecnologias para diferentes públicos, do iniciante ao avançado.",
-      "about.p2": "Atualmente, sou doutoranda em Ciência da Computação no Canadá, pesquisando soluções inovadoras para software e robótica, e já participei de projetos educacionais com grandes empresas como Intel e Google.",
-      "about.p3": "Ao longo da minha trajetória, ensinei em universidades e cursos no Brasil e no Canadá, sempre com a mesma missão: tornar o aprendizado de tecnologia acessível, prático e motivador — mesmo para quem nunca programou antes.",
-      "about.p4": "Minha paixão é ver meus alunos ganhando confiança, conquistando autonomia e criando seus primeiros projetos. E é exatamente isso que vamos fazer juntos na Tutoria de Python – Plano Básico.",
-      "about.p5": "Aqui, você não vai só aprender código. Você vai aprender a pensar como programador(a), de forma simples, aplicada e com o apoio de quem realmente acredita no seu potencial. 🚀",
-      "about.linkedin": "Conecte-se no LinkedIn",
+  <!-- Toast -->
+  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] toast-success font-semibold px-4 py-2 rounded-lg shadow">Inscrição registrada! 🎉</div>
 
-      "contact.title": "Garantir Minha Vaga",
-      "contact.p1": "Preencha o formulário e garanta sua vaga para a Turma 2!",
-      "contact.p2": "⚡ Vagas limitadas para garantir atenção individual<br>",
-      "contact.cta": " Faça sua Pré-Inscrição para a Turma 2",
-
-      "footer.tagline": "Transformando vidas através da programação Python",
-      "footer.privacy": "Política de Privacidade",
-      "footer.terms": "Termos de Uso",
-      "footer.copy": "© 2024 Python Tutoria. Todos os direitos reservados."
-    },
-
-    en: {
-      brand: "Python Tutoring",
-      "nav.about": "About the Instructor",
-      "nav.content": "Curriculum",
-      "hero.title.highlight": "Python Tutoring",
-      "hero.title.suffix": " – Starter Plan",
-      "hero.subtitle": "Learn programming from scratch and build your first project in 6 weeks",
-      "hero.ctaPrimary": "Pre-registration for 2nd Cohort",
-      "hero.ctaSecondary": "Learn More",
-
-      "who.title": "📌 Who is this for?",
-      "who.card1": "For those who have <strong>never programmed</strong> and want a practical start",
-      "who.card2": "For those who <strong>tried studying alone</strong> but felt lost",
-      "who.card3": "For those who want a <strong>finished project</strong> for their portfolio",
-      "who.card4": "For those who want to grasp <strong>programming logic</strong> and open doors to data analysis, automation, and AI",
-
-      "learn.title": "🚀 What you will learn",
-      "learn.subtitle": "In 6 weeks, you will master:",
-      "learn.item1.title": "Python fundamentals",
-      "learn.item1.desc": "Syntax, variables, operators",
-      "learn.item2.title": "Decision structures",
-      "learn.item2.desc": "if, else, elif",
-      "learn.item3.title": "Loops",
-      "learn.item3.desc": "for, while",
-      "learn.item4.title": "Functions",
-      "learn.item4.desc": "How to create and reuse code",
-      "learn.item5.title": "Data handling",
-      "learn.item5.desc": "Lists, dictionaries, and strings",
-      "learn.item6.title": "Final project",
-      "learn.item6.desc": "Developing your own project",
-
-      "how.title": "📂 How it works",
-      "how.live.title": "6 live sessions",
-      "how.live.desc": "2 hours each",
-      "how.ex.title": "Hands-on exercises",
-      "how.ex.desc": "Weekly practice to consolidate learning",
-      "how.rec.title": "Recorded classes",
-      "how.rec.desc": "Rewatch anytime",
-      "how.proj.title": "Final project",
-      "how.proj.desc": "With individual feedback",
-      "how.wa.title": "WhatsApp group",
-      "how.wa.desc": "Quick announcements and interaction",
-
-      "project.title": "🎯 Final Project",
-      "project.name": "Task Manager in Python",
-      "project.p1": "By the end, you will build a <strong>task manager in Python</strong>, applying everything you learned.",
-      "project.p2": "This will be your <strong>first portfolio piece</strong>, with personalized feedback to help you grow.",
-      "project.featuresTitle": "Project features:",
-      "project.f1": "✅ Add tasks",
-      "project.f2": "✅ Mark as completed",
-      "project.f3": "✅ List pending tasks",
-      "project.f4": "✅ Save data to a file",
-      "project.f5": "✅ Friendly interface",
-
-      "pricing.title": "💰 Investment",
-      "pricing.plan": "Python Tutoring - Starter Plan",
-      "pricing.brl": "R$ 468",
-      "pricing.cad": "CAD 137",
-      "pricing.start": "<strong>⚡ Start:</strong> October 06th, 2025",
-      "pricing.limited": "<strong>🚀 Limited seats</strong> to ensure individual attention",
-      "pricing.cta": "Pre-registration for 2nd cohort!!",
-
-      "about.title": "👩‍🏫 About the instructor",
-      "about.role": "Professor & Computer Science PhD Candidate",
-      "about.p1": "I'm Marcela dos Santos, a teacher with over 14 years of experience in computing, teaching programming, logic, and technologies to different audiences—from beginner to advanced.",
-      "about.p2": "Currently, I'm a Computer Science PhD candidate in Canada, researching innovative solutions for software and robotics, and I’ve participated in educational projects with companies like Intel and Google.",
-      "about.p3": "Throughout my journey, I’ve taught in universities and courses in Brazil and Canada, always with the same mission: make learning technology accessible, practical, and motivating—even for those who have never programmed before.",
-      "about.p4": "My passion is seeing my students gain confidence, build autonomy, and create their first projects. That’s exactly what we’ll do together in the Python Tutoring – Starter Plan.",
-      "about.p5": "Here, you won’t just learn code. You’ll learn to think like a programmer—in a simple, applied way, with support from someone who truly believes in your potential. 🚀",
-      "about.linkedin": "Connect on LinkedIn",
-
-      "contact.title": "Reserve My Spot",
-      "contact.p1": "Fill out the application form and secure your seat in the next cohort!",
-      "contact.p2": "⚡ Limited seats to ensure individual attention<br>",
-      "contact.cta": "Fill Out the Application Form",
-
-      "footer.tagline": "Transforming lives through Python programming",
-      "footer.privacy": "Privacy Policy",
-      "footer.terms": "Terms of Use",
-      "footer.copy": "© 2024 Python Tutoring. All rights reserved."
-    }
-  };
-
-  // Função de tradução
-  function translatePage(lang) {
-    const root = document.documentElement;
-    root.setAttribute('lang', lang === 'en' ? 'en' : 'pt-BR');
-
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = el.getAttribute("data-i18n");
-      const html = I18N[lang]?.[key];
-      if (html != null) {
-        // Alguns textos possuem <strong>, então usamos innerHTML
-        el.innerHTML = html;
+  <script>
+    // i18n
+    const i18n = {
+      pt: {
+        'nav.about': 'Sobre',
+        'nav.content': 'Conteúdo',
+        'nav.testimonials': 'Depoimentos',
+        'nav.pricing': 'Preço',
+        'badge.nextCohort': 'Turma 2 abrindo inscrições',
+        'hero.title.highlight': 'Tutoria de Python',
+        'hero.title.suffix': 'Plano Básico • 6 semanas',
+        'hero.subtitle': 'Aprenda programação do zero e crie seu primeiro projeto guiado, com encontros ao vivo e feedback individual.',
+        'hero.ctaPrimary': 'Faça sua Pré‑Inscrição',
+        'hero.ctaSecondary': 'Ver programa do curso',
+        'stats.weeks': 'semanas',
+        'stats.beginner': 'para iniciantes',
+        'stats.project': 'do início ao fim',
+        'hero.demoTitle': 'Demonstração de aulas e projeto',
+        'hero.demoNote': 'Você aprenderá a escrever, executar e entender cada linha.',
+        'benefits.title': 'Por que este programa funciona',
+        'benefits.guided.title': 'Trilha guiada',
+        'benefits.guided.desc': 'Passo a passo claro do zero até seu primeiro projeto.',
+        'benefits.feedback.title': 'Feedback real',
+        'benefits.feedback.desc': 'Correções e dicas práticas diretamente no seu código.',
+        'benefits.short.title': '6 semanas',
+        'benefits.short.desc': 'Objetivo claro com tempo definido para manter o foco.',
+        'program.title': 'Programa em 6 semanas',
+        'program.cta': 'Garantir minha vaga',
+        'program.w1': 'Fundamentos, variáveis, tipos, input/output.',
+        'program.w2': 'Condições, loops, listas e dicionários.',
+        'program.w3': 'Funções, organização e boas práticas.',
+        'program.w4': 'Arquivos, erros e módulos.',
+        'program.w5': 'Bibliotecas populares e APIs locais.',
+        'program.w6': 'Projeto final guiado e apresentação.',
+        'about.title': 'Sua professora',
+        'about.subtitle': 'Dev Python • +5 anos ensinando',
+        'about.text': 'Olá! Eu ajudo iniciantes a começarem com programação de forma prática e confiante. Você terá encontros ao vivo, materiais objetivos e feedback direto para evoluir do zero ao seu primeiro projeto.',
+        'about.point1': 'Aulas ao vivo gravadas',
+        'about.point2': 'Suporte rápido em comunidade',
+        'about.point3': 'Roteiro claro e sem enrolação',
+        'outcomes.title': 'Você sairá sabendo',
+        'outcomes.o1': 'Lógica e estruturas básicas',
+        'outcomes.o2': 'Escrever funções reutilizáveis',
+        'outcomes.o3': 'Trabalhar com arquivos',
+        'outcomes.o4': 'Finalizar um projeto próprio',
+        'extras.title': 'Extras incluídos',
+        'extras.e1': 'Checklist de estudos',
+        'extras.e2': 'Material de apoio',
+        'extras.e3': 'Exercícios práticos',
+        'extras.e4': 'Ideias de projetos',
+        'testimonials.title': 'O que alunos dizem',
+        'pricing.title': 'Preço e vagas',
+        'pricing.note': 'em até 12x no cartão (externo)',
+        'pricing.f1': '6 encontros ao vivo (1x por semana)',
+        'pricing.f2': 'Acesso às gravações',
+        'pricing.f3': 'Feedback no projeto final',
+        'pricing.f4': 'Comunidade para dúvidas',
+        'pricing.cta': 'Quero me inscrever',
+        'pricing.form': 'Prefiro Google Form',
+        'pricing.disclaimer': 'Pagamento é feito por plataforma segura externa (link abre em nova aba).',
+        'guarantee.title': 'Garantia',
+        'guarantee.copy': 'Se na primeira semana você sentir que não é para você, cancele sem custo. Sem perguntas.',
+        'cohort.title': 'Vagas limitadas',
+        'cohort.copy': 'Turmas pequenas para atenção individual.',
+        'faq.q1': 'Preciso saber programar?',
+        'faq.a1': 'Não! O curso começa do zero e evolui no ritmo certo.',
+        'faq.q2': 'As aulas são ao vivo?',
+        'faq.a2': 'Sim, com gravações disponíveis no dia seguinte.',
+        'faq.q3': 'Como tiro dúvidas?',
+        'faq.a3': 'Você terá uma comunidade e momentos dedicados a perguntas.',
+        'form.title': 'Pré‑inscrição',
+        'form.subtitle': 'Preencha e eu retorno com os próximos passos.',
+        'form.nameLabel': 'Seu nome',
+        'form.goalLabel': 'Seu objetivo',
+        'form.goal1': 'Primeiro contato com programação',
+        'form.goal2': 'Mudar de carreira',
+        'form.goal3': 'Projeto pessoal',
+        'form.submit': 'Enviar interesse',
+        'form.alt': 'Abrir Google Form',
+        'form.note': 'Este é um envio de demonstração (sem servidor). Você verá uma confirmação.'
+      },
+      en: {
+        'nav.about': 'About',
+        'nav.content': 'Content',
+        'nav.testimonials': 'Testimonials',
+        'nav.pricing': 'Pricing',
+        'badge.nextCohort': 'Cohort 2 opening soon',
+        'hero.title.highlight': 'Python Tutoring',
+        'hero.title.suffix': 'Starter Plan • 6 weeks',
+        'hero.subtitle': 'Learn from scratch and build your first guided project with live sessions and personal feedback.',
+        'hero.ctaPrimary': 'Pre‑Register',
+        'hero.ctaSecondary': 'View curriculum',
+        'stats.weeks': 'weeks',
+        'stats.beginner': 'for beginners',
+        'stats.project': 'from start to finish',
+        'hero.demoTitle': 'Class & project preview',
+        'hero.demoNote': 'You will write, run and understand each line.',
+        'benefits.title': 'Why this program works',
+        'benefits.guided.title': 'Guided path',
+        'benefits.guided.desc': 'Step‑by‑step from zero to your first project.',
+        'benefits.feedback.title': 'Real feedback',
+        'benefits.feedback.desc': 'Corrections and practical tips right on your code.',
+        'benefits.short.title': '6 weeks',
+        'benefits.short.desc': 'Clear goal with a defined timeline.',
+        'program.title': '6‑week program',
+        'program.cta': 'Secure my seat',
+        'program.w1': 'Basics, variables, types, input/output.',
+        'program.w2': 'Conditions, loops, lists and dicts.',
+        'program.w3': 'Functions, structure and best practices.',
+        'program.w4': 'Files, errors and modules.',
+        'program.w5': 'Popular libraries and local APIs.',
+        'program.w6': 'Final guided project and presentation.',
+        'about.title': 'Your instructor',
+        'about.subtitle': 'Python dev • 5+ years teaching',
+        'about.text': 'Hi! I help beginners start coding with confidence. You get live sessions, straight‑to‑the‑point materials and direct feedback to go from zero to your first project.',
+        'about.point1': 'Live classes with recordings',
+        'about.point2': 'Quick support in community',
+        'about.point3': 'Clear roadmap, no fluff',
+        'outcomes.title': 'You will be able to',
+        'outcomes.o1': 'Logic and basic structures',
+        'outcomes.o2': 'Write reusable functions',
+        'outcomes.o3': 'Work with files',
+        'outcomes.o4': 'Deliver your own project',
+        'extras.title': 'Included extras',
+        'extras.e1': 'Study checklist',
+        'extras.e2': 'Supporting materials',
+        'extras.e3': 'Hands‑on exercises',
+        'extras.e4': 'Project ideas',
+        'testimonials.title': 'What students say',
+        'pricing.title': 'Pricing & seats',
+        'pricing.note': 'up to 12x on card (external)',
+        'pricing.f1': '6 live sessions (weekly)',
+        'pricing.f2': 'Access to recordings',
+        'pricing.f3': 'Feedback on final project',
+        'pricing.f4': 'Community for questions',
+        'pricing.cta': 'I want in',
+        'pricing.form': 'Prefer Google Form',
+        'pricing.disclaimer': 'Payment is processed by a secure external platform (opens in a new tab).',
+        'guarantee.title': 'Guarantee',
+        'guarantee.copy': 'If after week 1 it’s not for you, cancel with no cost. No questions asked.',
+        'cohort.title': 'Limited seats',
+        'cohort.copy': 'Small cohorts for individual attention.',
+        'faq.q1': 'Do I need prior experience?',
+        'faq.a1': 'No! We start from absolute zero and progress at a solid pace.',
+        'faq.q2': 'Are classes live?',
+        'faq.a2': 'Yes, with recordings available the next day.',
+        'faq.q3': 'How do I ask questions?',
+        'faq.a3': 'You’ll have a community and dedicated Q&A moments.',
+        'form.title': 'Pre‑registration',
+        'form.subtitle': 'Fill this out and I’ll send next steps.',
+        'form.nameLabel': 'Your name',
+        'form.goalLabel': 'Your goal',
+        'form.goal1': 'First contact with coding',
+        'form.goal2': 'Career change',
+        'form.goal3': 'Personal project',
+        'form.submit': 'Send interest',
+        'form.alt': 'Open Google Form',
+        'form.note': 'This is a demo submission (no server). You’ll see a confirmation.'
       }
+    };
+
+    let currentLang = 'pt';
+    function applyTranslations(lang){
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        const text = i18n[lang][key];
+        if(typeof text === 'string') el.textContent = text;
+      });
+      const next = lang === 'pt' ? 'EN' : 'PT';
+      document.getElementById('langToggle').textContent = next;
+      document.getElementById('langToggleMobile').textContent = next;
+      currentLang = lang;
+    }
+
+    // Menu
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+
+    // Idioma
+    const langBtn = document.getElementById('langToggle');
+    const langBtnM = document.getElementById('langToggleMobile');
+    function toggleLang(){ applyTranslations(currentLang === 'pt' ? 'en' : 'pt'); }
+    langBtn.addEventListener('click', toggleLang);
+    langBtnM.addEventListener('click', toggleLang);
+
+    // Modal
+    const modal = document.getElementById('modal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const openers = ['openModalCta','openModalCta2','openModalCta3','openModalCtaMobile']
+      .map(id=>document.getElementById(id)).filter(Boolean);
+    const closeModalBtn = document.getElementById('closeModal');
+
+    function openModal(){ modal.classList.remove('hidden'); modalOverlay.classList.remove('hidden'); }
+    function closeModal(){ modal.classList.add('hidden'); modalOverlay.classList.add('hidden'); }
+    openers.forEach(btn => btn.addEventListener('click', openModal));
+    modalOverlay.addEventListener('click', closeModal);
+    closeModalBtn.addEventListener('click', closeModal);
+
+    // Form (demo)
+    const preForm = document.getElementById('preForm');
+    const toast = document.getElementById('toast');
+    preForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if(!nome || !email) return;
+      closeModal();
+      toast.textContent = currentLang === 'pt' ? 'Inscrição registrada! 🎉' : 'Pre‑registration saved! 🎉';
+      toast.classList.remove('hidden');
+      setTimeout(()=> toast.classList.add('hidden'), 2500);
+      preForm.reset();
     });
 
-    // Atualiza rótulos dos botões de idioma
-    const tgl = document.getElementById("langToggle");
-    const tglM = document.getElementById("langToggleMobile");
-    if (tgl) tgl.textContent = lang === "pt" ? "EN" : "PT";
-    if (tglM) tglM.textContent = lang === "pt" ? "EN" : "PT";
+    // Google Form em nova aba
+    const googleFormURL = 'https://forms.gle/wtr1b8UA2jUnMkN66'; // troque pelo link real
+    function openGoogleForm(){
+      window.open(googleFormURL, '_blank', 'noopener,noreferrer');
+    }
+    const openFormExternal = document.getElementById('openFormExternal');
+    const openFormExternal2 = document.getElementById('openFormExternal2');
+    openFormExternal.addEventListener('click', openGoogleForm);
+    openFormExternal2.addEventListener('click', openGoogleForm);
 
-    localStorage.setItem("site_lang", lang);
-  }
+    // Depoimentos
+    const testimonials = [
+      { t: '“Saí do zero e apresentei meu primeiro projeto em 5 semanas!”', a: '— Ana, aluna da Turma 1' },
+      { t: '“A didática é incrível. Finalmente entendi lógica de programação.”', a: '— Bruno, mudança de carreira' },
+      { t: '“Material direto ao ponto e muito apoio. Recomendo!”', a: '— Carla, iniciante' }
+    ];
+    let tIndex = 0;
+    const testimonyEl = document.getElementById('testimony');
+    function renderTestimony(){
+      const item = testimonials[tIndex];
+      testimonyEl.innerHTML = `<p class="text-lg font-semibold">${item.t}</p><p class="text-sm text-slate-600 mt-2">${item.a}</p>`;
+    }
+    function nextT(){ tIndex = (tIndex + 1) % testimonials.length; renderTestimony(); }
+    function prevT(){ tIndex = (tIndex - 1 + testimonials.length) % testimonials.length; renderTestimony(); }
+    ['nextTest','nextTestM'].forEach(id => document.getElementById(id).addEventListener('click', nextT));
+    ['prevTest','prevTestM'].forEach(id => document.getElementById(id).addEventListener('click', prevT));
+    setInterval(nextT, 6000);
 
-  // Alternância
-  function toggleLang() {
-    const current = localStorage.getItem("site_lang") || "pt";
-    const next = current === "pt" ? "en" : "pt";
-    translatePage(next);
-  }
+    // Capacidade (demo)
+    const capacityText = document.getElementById('capacityText');
+    const capacityBar = document.getElementById('capacityBar');
+    let filled = 9, total = 20;
+    function updateCapacity(){
+      const pct = Math.min(100, Math.round((filled/total)*100));
+      capacityBar.style.width = pct + '%';
+      capacityText.textContent = `${filled}/${total} vagas preenchidas`;
+    }
+    updateCapacity();
 
-  // Liga eventos
-  document.getElementById("langToggle")?.addEventListener("click", toggleLang);
-  document.getElementById("langToggleMobile")?.addEventListener("click", toggleLang);
-
-  // Inicializa idioma
-  const saved = localStorage.getItem("site_lang") || "pt";
-  translatePage(saved);
-    </script>
-</body>
+    // Inicial
+    applyTranslations('pt');
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98322e94c6f9a2d0',t:'MTc1ODU0ODA4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
