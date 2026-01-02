@@ -169,7 +169,7 @@
             <p class="text-xs text-slate-600" data-i18n="stats.beginner">para iniciantes</p>
           </div>
           <div class="glass p-4">
-            <p class="text-2xl font-extrabold title-accent" data-i18n="stats.project.title ">1 projeto</p>
+            <p class="text-2xl font-extrabold title-accent" data-i18n="stats.project.title">1 projeto</p>
             <p class="text-xs text-slate-600" data-i18n="stats.project">do início ao fim</p>
           </div>
         </div>
@@ -319,8 +319,8 @@ for aluno in ["Raphaela", "Debora"]:
       <div class="mt-8 grid md:grid-cols-2 gap-6">
         <!-- Coluna: Investimento -->
         <div class="glass p-6 md:p-8">
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--main-blue)] text-white text-xs font-bold">Básico</div>
-          <p class="mt-4 text-4xl font-extrabold title-accent">R$ 468 ou CAD 137</p>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--main-blue)] text-white text-xs font-bold"  data-i18n="pricing.type.package">Básico</div>
+          <p class="mt-4 text-4xl font-extrabold title-accent">R$ 600 ou CAD 150</p>
 
           <ul class="mt-4 space-y-2 text-slate-800">
             <li>✅ <span data-i18n="pricing.f1">6 encontros ao vivo (1x por semana)</span></li>
@@ -480,6 +480,7 @@ for aluno in ["Raphaela", "Debora"]:
         'extras.e3': 'Exercícios práticos',
         'extras.e4': 'Ideias de projetos',
         'testimonials.title': 'O que alunos dizem',
+        'pricing.type.package': 'Básico',
         'pricing.title': 'Preço e vagas',
         'pricing.note': 'em até 12x no cartão (externo)',
         'pricing.f1': '6 encontros ao vivo (1x por semana)',
@@ -591,6 +592,7 @@ for aluno in ["Raphaela", "Debora"]:
         'pricing.f4': 'Community for questions',
         'pricing.cta': 'I want in',
         'pricing.form': 'Prefer Google Form',
+        'pricing.type.package': 'Basic',
         'pricing.disclaimer': 'Payment is processed by a secure external platform (opens in a new tab).',
         'guarantee.title': 'Guarantee',
         'guarantee.copy': 'If after week 1 it’s not for you, cancel with no cost. No questions asked.',
@@ -669,9 +671,15 @@ for aluno in ["Raphaela", "Debora"]:
     });
 
     // Google Form em nova aba
-    const googleFormURL = 'https://forms.gle/wtr1b8UA2jUnMkN66'; // troque pelo link real
+    const googleFormURLs = {
+      pt: 'https://forms.gle/wtr1b8UA2jUnMkN66',
+      en: 'https://forms.gle/Pm4zWzsr7LtcnjxN6'
+};
+    //const googleFormURL = 'https://forms.gle/wtr1b8UA2jUnMkN66'; // troque pelo link real
     function openGoogleForm(){
-      window.open(googleFormURL, '_blank', 'noopener,noreferrer');
+      //window.open(googleFormURL, '_blank', 'noopener,noreferrer');
+      const url = googleFormURLs[currentLang] || googleFormURLs.pt;
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
     const openFormExternal = document.getElementById('openFormExternal');
     const openFormExternal2 = document.getElementById('openFormExternal2');
