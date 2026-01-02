@@ -617,7 +617,7 @@ for aluno in ["Raphaela", "Debora"]:
       }
     };
 
-    let currentLang = 'pt';
+    let currentLang = 'en';
     function applyTranslations(lang){
       document.querySelectorAll('[data-i18n]').forEach(el=>{
         const key = el.getAttribute('data-i18n');
@@ -629,7 +629,9 @@ for aluno in ["Raphaela", "Debora"]:
       document.getElementById('langToggleMobile').textContent = next;
       currentLang = lang;
     }
-
+    document.addEventListener('DOMContentLoaded', () => {
+    applyTranslations(currentLang);
+    });
     // Menu
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
