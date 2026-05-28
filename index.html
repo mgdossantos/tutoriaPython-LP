@@ -1,714 +1,915 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title data-i18n="principal.title.aba">Comece do Zero e Domine o Básico de Python em 6 Semanas</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Python Básico — Aprenda a programar do zero</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
   <style>
-    :root{
-      --main-bg: #fdf6e3;
-      --main-blue: #1e3a8a;
-      --main-red: #e74c3c;
-      --card-bg: #fff;
-      --border-radius: 1.5rem;
-      --shadow: 0 4px 28px rgba(30,58,138,0.10);
+    :root {
+      --cream:  #fdf6e3;
+      --red:    #e74c3c;
+      --red-dk: #c0392b;
+      --red-lt: #ff6b5b;
+      --blue:   #1e3a8a;
+      --blue-lt:#2a52c9;
+      --ink:    #1a1a1a;
+      --muted:  #5a5a5a;
+      --border: rgba(30,58,138,.12);
+
+      /* dark mode vars */
+      --bg:        #0f1f4a;
+      --bg-card:   #162358;
+      --bg-card2:  #1a2d6e;
+      --text:      #eef2ff;
+      --text-muted:#8b9cc8;
+      --border-dk: rgba(255,255,255,.08);
+      --border-dk2:rgba(255,255,255,.13);
     }
-    html, body { height: 100%; }
-    body {
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background: var(--main-bg);
-      color: #0f172a;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 400; line-height: 1.6; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px;
     }
-    html { scroll-behavior: smooth; }
-    /* Sutileza de textura */
-    .grain::before{
-      content:""; position:absolute; inset:0; pointer-events:none; opacity:.06;
-      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect fill="%231e3a8a" width="1" height="1" x="20" y="30"/><rect fill="%231e3a8a" width="1" height="1" x="120" y="80"/><rect fill="%231e3a8a" width="1" height="1" x="60" y="202"/></svg>');
-      background-size:180px 180px;
+
+    /* TOPBAR */
+    .topbar { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-dk); background: rgba(15,31,74,.92); backdrop-filter: blur(12px); }
+    .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .logo { display: flex; align-items: center; gap: .6rem; text-decoration: none; }
+    .logo-snake { width: 32px; height: 32px; border-radius: 8px; background: var(--red); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .logo-text { font-family: 'Playfair Display', serif; font-weight: 700; font-size: .9rem; color: var(--cream); }
+    .topnav { display: flex; gap: .25rem; align-items: center; }
+    .topnav a { font-size: .8rem; color: var(--text-muted); padding: .4rem .75rem; border-radius: 6px; text-decoration: none; transition: color .2s, background .2s; }
+    .topnav a:hover { color: var(--cream); background: rgba(255,255,255,.07); }
+    .btn-cta-sm { font-family: 'DM Sans', sans-serif; font-size: .8rem; font-weight: 500; background: var(--red); color: #fff; padding: .5rem 1.25rem; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: background .2s, transform .15s; border: none; cursor: pointer; }
+    .btn-cta-sm:hover { background: var(--red-dk); transform: translateY(-1px); }
+    .mobile-btn { display: none; background: none; border: 1px solid var(--border-dk2); border-radius: 6px; padding: .4rem .75rem; cursor: pointer; font-size: .8rem; color: var(--cream); }
+    #mobileDrawer { display: none; flex-direction: column; background: var(--bg-card); border-bottom: 1px solid var(--border-dk); padding: 1rem 2rem; }
+    #mobileDrawer.open { display: flex; }
+    #mobileDrawer a { padding: .6rem 0; font-size: .9rem; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border-dk); }
+    #mobileDrawer a:last-child { border: none; padding-top: .8rem; }
+
+    /* HERO */
+    .hero { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem 5rem; display: grid; grid-template-columns: 1fr 380px; gap: 4rem; align-items: start; position: relative; }
+    .hero::after { content: ''; position: absolute; right: 1rem; top: 3rem; width: 340px; height: 340px; border-radius: 50%; background: radial-gradient(circle, rgba(231,76,60,.12) 0%, transparent 70%); pointer-events: none; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--red-lt); letter-spacing: .1em; text-transform: uppercase; border: 1px solid rgba(231,76,60,.35); padding: .3rem .8rem; border-radius: 4px; margin-bottom: 1.5rem; }
+    .hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--red-lt); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.85)} }
+    .hero-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(3rem, 6vw, 5.5rem); line-height: 1.0; color: var(--cream); margin-bottom: 1.5rem; letter-spacing: -.02em; }
+    .hero-title em { font-style: italic; color: var(--red-lt); }
+    .hero-sub { font-size: 1.1rem; color: var(--text-muted); max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+    .btn-primary { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; background: var(--red); color: #fff; padding: .875rem 2rem; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 24px rgba(231,76,60,.35); }
+    .btn-primary:hover { background: var(--red-dk); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(231,76,60,.5); }
+    .btn-ghost { font-size: .9rem; color: var(--text-muted); padding: .875rem 1.5rem; border-radius: 10px; border: 1px solid var(--border-dk2); text-decoration: none; transition: background .2s, color .2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,.07); color: var(--cream); }
+
+    /* HERO CARD */
+    .hero-card { background: var(--bg-card2); border: 1px solid var(--border-dk2); color: #fff; border-radius: 20px; padding: 2rem; position: sticky; top: 80px; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+    .hero-card-label { font-family: 'DM Mono', monospace; font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.4); margin-bottom: 1rem; }
+    .price-big { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; line-height: 1; color: #fff; margin-bottom: .25rem; }
+    .price-sub { font-size: .8rem; color: rgba(255,255,255,.45); margin-bottom: 1.5rem; }
+    .card-checks { list-style: none; margin-bottom: 1.75rem; }
+    .card-checks li { display: flex; gap: .6rem; align-items: flex-start; font-size: .82rem; color: rgba(255,255,255,.75); padding: .35rem 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .card-checks li:last-child { border: none; }
+    .card-checks li .chk { color: var(--red-lt); font-size: .9rem; margin-top: .05rem; flex-shrink: 0; }
+    .btn-card { display: block; text-align: center; background: var(--red); color: #fff; font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 500; padding: .9rem; border-radius: 10px; text-decoration: none; transition: background .2s, transform .15s; box-shadow: 0 4px 20px rgba(231,76,60,.3); }
+    .btn-card:hover { background: var(--red-dk); transform: translateY(-1px); }
+    .card-note { text-align: center; font-size: .72rem; color: rgba(255,255,255,.3); margin-top: .75rem; }
+    .code-block { background: rgba(0,0,0,.3); border-radius: 12px; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: 'DM Mono', monospace; font-size: .75rem; color: rgba(255,255,255,.75); line-height: 1.8; border-left: 3px solid var(--red); }
+    .code-block .kw { color: #93c5fd; }
+    .code-block .st { color: #86efac; }
+    .code-note { font-size: .72rem; color: rgba(255,255,255,.3); margin-top: .5rem; font-style: italic; }
+
+    /* STATS */
+    .stats-bar { border-top: 1px solid var(--border-dk); border-bottom: 1px solid var(--border-dk); background: rgba(255,255,255,.03); }
+    .stats-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: repeat(4,1fr); }
+    .stat { padding: 1.5rem 1rem; border-right: 1px solid var(--border-dk); text-align: center; }
+    .stat:last-child { border: none; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: var(--red-lt); line-height: 1; display: block; }
+    .stat-label { font-size: .75rem; color: var(--text-muted); margin-top: .25rem; display: block; }
+
+    /* SECTIONS */
+    .section { max-width: 1200px; margin: 0 auto; padding: 5rem 2rem; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; color: var(--cream); line-height: 1.1; margin-bottom: .75rem; }
+    .section-sub { font-size: .95rem; color: var(--text-muted); max-width: 540px; line-height: 1.7; }
+
+    /* GRADE 3 colunas com borda */
+    .grid-border { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; border: 1px solid var(--border-dk); border-radius: 16px; overflow: hidden; margin-top: 3rem; background: var(--border-dk); }
+    .grid-border-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; border: 1px solid var(--border-dk); border-radius: 16px; overflow: hidden; margin-top: 3rem; background: var(--border-dk); }
+    .grid-item { background: var(--bg-card); padding: 2rem 1.75rem; transition: background .2s; }
+    .grid-item:hover { background: var(--bg-card2); }
+    .grid-icon { font-size: 1.75rem; margin-bottom: 1rem; }
+    .grid-item h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--cream); margin-bottom: .6rem; }
+    .grid-item p { font-size: .85rem; color: var(--text-muted); line-height: 1.65; }
+
+    /* SEMANAS */
+    .semanas-list { display: flex; flex-direction: column; gap: 2px; margin-top: 3rem; }
+    .semana { border: 1px solid var(--border-dk); border-radius: 14px; overflow: hidden; background: var(--bg-card); transition: box-shadow .2s; }
+    .semana:hover { box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+    .semana-btn { width: 100%; background: none; border: none; cursor: pointer; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; text-align: left; }
+    .semana-num-badge { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.5rem; color: var(--red-lt); width: 2.5rem; flex-shrink: 0; line-height: 1; }
+    .semana-meta { flex: 1; min-width: 0; }
+    .semana-name { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: .95rem; color: var(--text); }
+    .semana-sub { font-size: .78rem; color: var(--text-muted); margin-top: .2rem; }
+    .semana-arrow { font-size: .8rem; color: var(--text-muted); flex-shrink: 0; transition: transform .25s; }
+    .semana-arrow.open { transform: rotate(180deg); }
+    .semana-body { display: none; padding: 0 1.5rem 1.5rem 5rem; }
+    .semana-body.open { display: block; }
+    .aula-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .aula-col { border-radius: 10px; padding: 1rem 1.25rem; }
+    .aula-col-terminal { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); }
+    .aula-col-streamlit { background: rgba(231,76,60,.08); border: 1px solid rgba(231,76,60,.2); }
+    .aula-col-label { font-family: 'DM Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 500; margin-bottom: .6rem; display: block; }
+    .aula-col-terminal .aula-col-label { color: #93c5fd; }
+    .aula-col-streamlit .aula-col-label { color: var(--red-lt); }
+    .aula-col ul { list-style: none; }
+    .aula-col ul li { font-size: .82rem; color: var(--text-muted); padding: .25rem 0; display: flex; gap: .6rem; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .aula-col ul li:last-child { border: none; }
+    .aula-col ul li .dot { flex-shrink: 0; margin-top: .3rem; font-size: .55rem; }
+    .aula-col-terminal ul li .dot { color: #93c5fd; }
+    .aula-col-streamlit ul li .dot { color: var(--red-lt); }
+    .entregavel { background: rgba(255,255,255,.05); border-left: 3px solid var(--red-lt); border-radius: 0 8px 8px 0; padding: .6rem 1rem; font-size: .82rem; color: var(--text-muted); }
+    .entregavel strong { font-weight: 600; display: block; margin-bottom: .1rem; color: var(--text); }
+    .semana-final { border-color: rgba(231,76,60,.4) !important; }
+    .semana-final .semana-num-badge { color: var(--red-lt); }
+    .semana-final .entregavel { border-color: var(--red-lt); }
+
+    /* BONUS */
+    .bonus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3rem; }
+    .bonus-card { background: var(--bg-card); border: 1px solid var(--border-dk); border-radius: 16px; padding: 1.75rem; position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+    .bonus-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .bonus-card:nth-child(1)::before { background: #22c55e; }
+    .bonus-card:nth-child(2)::before { background: #93c5fd; }
+    .bonus-card:nth-child(3)::before { background: #fbbf24; }
+    .bonus-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.3); }
+    .bonus-tag { font-family: 'DM Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-bottom: .75rem; display: block; }
+    .bonus-num { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 2.5rem; color: rgba(255,255,255,.05); position: absolute; bottom: 1rem; right: 1.25rem; line-height: 1; }
+    .bonus-card h3 { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: .95rem; color: var(--text); margin-bottom: .6rem; line-height: 1.4; }
+    .bonus-card p { font-size: .82rem; color: var(--text-muted); line-height: 1.65; }
+    .bonus-result { font-size: .75rem; font-weight: 500; margin-top: .75rem; padding: .4rem .75rem; border-radius: 6px; display: inline-block; }
+    .bonus-card-wide { grid-column: span 2; }
+    @media (max-width: 900px) { .bonus-card-wide { grid-column: span 1; } }
+
+    /* PROFESSORA */
+    .prof-grid { display: grid; grid-template-columns: 260px 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+    .prof-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 20px; border: 1px solid var(--border-dk2); }
+    .prof-img-caption { margin-top: .75rem; font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--text-muted); letter-spacing: .06em; }
+    .prof-content h3 { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 700; color: var(--cream); margin-bottom: 1rem; line-height: 1.2; }
+    .prof-content p { font-size: .92rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 1rem; }
+    .prof-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem; }
+    .prof-tag { font-family: 'DM Mono', monospace; font-size: .7rem; padding: .3rem .75rem; border: 1px solid var(--border-dk2); border-radius: 4px; color: var(--text-muted); letter-spacing: .04em; }
+
+    /* MATERIAIS */
+    .mat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; border: 1px solid var(--border-dk); border-radius: 16px; overflow: hidden; background: var(--border-dk); margin-top: 2rem; }
+    .mat-item { background: var(--bg-card); padding: 1.75rem 1.5rem; }
+    .mat-icon { font-size: 1.5rem; margin-bottom: .75rem; display: block; }
+    .mat-item h3 { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: .9rem; color: var(--cream); margin-bottom: .4rem; }
+    .mat-item p { font-size: .8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* DEPOIMENTOS */
+    .dep-placeholder { background: rgba(255,255,255,.03); border: 1px dashed var(--border-dk2); border-radius: 16px; padding: 2rem; text-align: center; margin-top: 3rem; }
+    .dep-placeholder p { font-size: .85rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* PRICING */
+    .info-section { background: var(--bg-card2); border: 1px solid var(--border-dk2); border-radius: 24px; overflow: hidden; display: grid; grid-template-columns: 1fr 380px; margin-top: 2rem; }
+    .info-left { padding: 3.5rem; }
+    .info-left h3 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--cream); margin-bottom: 1.5rem; line-height: 1.2; }
+    .info-checks { list-style: none; }
+    .info-checks li { display: flex; gap: .75rem; align-items: flex-start; font-size: .9rem; color: var(--text-muted); padding: .6rem 0; border-bottom: 1px solid var(--border-dk); }
+    .info-checks li:last-child { border: none; }
+    .info-checks li .ck { color: var(--red-lt); flex-shrink: 0; font-size: 1rem; margin-top: .05rem; }
+    .info-right { background: rgba(0,0,0,.2); padding: 3.5rem 2.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .price-label { font-family: 'DM Mono', monospace; font-size: .7rem; color: rgba(255,255,255,.3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .5rem; }
+    .price-main { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; color: #fff; line-height: 1; }
+    .price-detail { font-size: .8rem; color: rgba(255,255,255,.35); margin: .4rem 0 2rem; }
+    .btn-price { display: block; width: 100%; background: var(--red); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; padding: 1rem; border-radius: 10px; text-decoration: none; text-align: center; transition: background .2s; margin-bottom: .75rem; box-shadow: 0 4px 20px rgba(231,76,60,.3); }
+    .btn-price:hover { background: var(--red-dk); }
+    .price-note { font-size: .72rem; color: rgba(255,255,255,.25); }
+
+    /* FAQ */
+    .faq-list { margin-top: 2.5rem; border-top: 1px solid var(--border-dk); }
+    .faq-item { border-bottom: 1px solid var(--border-dk); }
+    .faq-btn { width: 100%; background: none; border: none; cursor: pointer; padding: 1.2rem 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; text-align: left; }
+    .faq-btn span.q { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: .9rem; color: var(--text); }
+    .faq-btn span.ico { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--red-lt); flex-shrink: 0; line-height: 1; transition: transform .25s; }
+    .faq-btn.open span.ico { transform: rotate(45deg); }
+    .faq-ans { font-size: .85rem; color: var(--text-muted); line-height: 1.75; padding: 0 0 1.2rem; max-width: 680px; display: none; }
+    .faq-ans.open { display: block; }
+
+    /* CTA FINAL */
+    .cta-final { text-align: center; padding: 6rem 2rem; position: relative; overflow: hidden; }
+    .cta-final::before { content: 'PYTHON'; position: absolute; font-family: 'Playfair Display', serif; font-size: 18vw; font-weight: 900; color: rgba(255,255,255,.03); top: 50%; left: 50%; transform: translate(-50%,-50%); white-space: nowrap; pointer-events: none; user-select: none; }
+    .cta-final h2 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,5vw,4.5rem); font-weight: 900; color: var(--cream); line-height: 1.05; margin-bottom: 1rem; position: relative; }
+    .cta-final h2 em { font-style: italic; color: var(--red-lt); }
+    .cta-final p { font-size: 1rem; color: var(--text-muted); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; position: relative; }
+    .cta-final .actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; position: relative; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border-dk); padding: 2rem; text-align: center; font-size: .78rem; color: rgba(255,255,255,.2); }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--cream); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* BACK TO TOP */
+    #btnTop { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--red); color: #fff; border: none; cursor: pointer; width: 40px; height: 40px; border-radius: 10px; font-size: .8rem; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(231,76,60,.3); transition: transform .2s; }
+    #btnTop:hover { transform: translateY(-2px); }
+    #btnTop.show { display: flex; }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 2rem; }
+      .hero::after { display: none; }
+      .hero-card { position: static; }
+      .stats-inner { grid-template-columns: repeat(2,1fr); }
+      .stat:nth-child(2) { border-right: none; }
+      .grid-border { grid-template-columns: 1fr 1fr; }
+      .grid-border-2 { grid-template-columns: 1fr; }
+      .aula-cols { grid-template-columns: 1fr; }
+      .bonus-grid { grid-template-columns: 1fr 1fr; }
+      .prof-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .prof-img { aspect-ratio: 4/3; max-width: 280px; }
+      .mat-grid { grid-template-columns: 1fr 1fr; }
+      .info-section { grid-template-columns: 1fr; }
+      .info-right { padding: 2.5rem; }
+      .topnav { display: none; }
+      .mobile-btn { display: block; }
+      .semana-body { padding-left: 1.5rem; }
     }
-    .fade-up{ animation:fadeUp .7s ease both; }
-    @keyframes fadeUp{ from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:translateY(0)} }
-    /* Cartões e componentes base */
-    .glass{
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(30,58,138,0.10);
+    @media (max-width: 600px) {
+      .grid-border { grid-template-columns: 1fr; }
+      .bonus-grid { grid-template-columns: 1fr; }
+      .mat-grid { grid-template-columns: 1fr; }
+      .stats-inner { grid-template-columns: repeat(2,1fr); }
     }
-    .chip{
-      background: rgba(30,58,138,0.08);
-      color: var(--main-blue);
-      border-radius: 999px;
-    }
-    .title-accent{ color: var(--main-blue); }
-    /* Botões */
-    .btn-primary{
-      background: var(--main-red); color:#fff; font-weight:700; border-radius: .875rem;
-      transition: .2s ease; box-shadow: 0 6px 18px rgba(30,58,138,.18);
-    }
-    .btn-primary:hover{ background:#162a6b; }
-    .btn-ghost{
-      color: var(--main-blue); background: transparent; border:1px solid rgba(30,58,138,0.25);
-      border-radius: .875rem; font-weight:600; transition:.2s ease;
-    }
-    .btn-ghost:hover{ background: rgba(30,58,138,0.06); }
-    .btn-danger{ background: var(--main-red); color:#fff; }
-    .btn-danger:hover{ filter: brightness(.95); }
-    /* Barras e toasts */
-    .bar-track{ background: rgba(30,58,138,0.18); }
-    .bar-fill{ background: var(--main-blue); }
-    .toast-success{ background: var(--main-blue); color:#fff; }
-    /* Painel de código */
-    .code-panel{
-      background:#0f1a3a; color:#e5e7eb; border:1px solid rgba(30,58,138,0.25);
-    }
-    .code-panel pre, .code-panel code{ color:#e5e7eb; }
-    /* Inputs */
-    .input{
-      width:100%; background:#fff; color:#0f172a; border-radius:.875rem; padding:.6rem .75rem;
-      outline:none; border:1px solid rgba(30,58,138,0.20);
-      transition: box-shadow .2s ease, border-color .2s ease;
-    }
-    .input:focus{
-      border-color: var(--main-blue);
-      box-shadow: 0 0 0 4px rgba(30,58,138,0.18);
-    }
-    /* Links no rodapé */
-    .footer-link{ color:#334155; }
-    .footer-link:hover{ color: var(--main-blue); }
   </style>
 </head>
-<body class="relative overflow-x-hidden">
-  <div class="grain absolute inset-0"></div>
+<body>
 
-  <!-- Header -->
-  <header class="relative z-10">
-    <nav class="max-w-7xl mx-auto px-6 lg:px-8 py-5">
-      <div class="flex items-center justify-between">
-        <a href="#top" class="group inline-flex items-center gap-3" aria-label="Início">
-          <div class="w-10 h-10 rounded-xl grid place-items-center bg-[var(--main-blue)] text-white font-black text-xl shadow-lg">🐍</div>
-          <div>
-            <p class="text-lg font-extrabold tracking-tight title-accent" data-i18n="principal.title">Python Básico</p>
-            <p class="text-xs text-slate-600 -mt-1" data-i18n="principal.title.sub">Do zero ao seu 1º projeto</p>
-          </div>
-        </a>
-
-        <div class="hidden md:flex items-center gap-8">
-          <a href="#sobre" class="text-slate-700 hover:text-[var(--main-blue)] transition" data-i18n="nav.about">Sobre</a>
-          <a href="#conteudo" class="text-slate-700 hover:text-[var(--main-blue)] transition" data-i18n="nav.content">Conteúdo</a>
-          <a href="#depoimentos" class="text-slate-700 hover:text-[var(--main-blue)] transition" data-i18n="nav.testimonials">Depoimentos</a>
-          <a href="#preco" class="text-slate-700 hover:text-[var(--main-blue)] transition" data-i18n="nav.pricing">Preço</a>
-          <a href="#faq" class="text-slate-700 hover:text-[var(--main-blue)] transition">FAQ</a>
-<button
-  id="openFormHero"
-  class="btn-primary px-4 py-2"
-  data-i18n="hero.ctaPrimary"
-  onclick="openGoogleForm()"
->
-  Pré-inscrição
-</button>        </div>
-
-        <div class="md:hidden flex items-center gap-3">
-          <button id="menuBtn" class="btn-ghost p-2" aria-label="Abrir menu">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div id="mobileMenu" class="hidden md:hidden mt-4 glass rounded-xl p-4 space-y-3">
-        <a href="#sobre" class="block hover:text-[var(--main-blue)] transition" data-i18n="nav.about">Sobre</a>
-        <a href="#conteudo" class="block hover:text-[var(--main-blue)] transition" data-i18n="nav.content">Conteúdo</a>
-        <a href="#depoimentos" class="block hover:text-[var(--main-blue)] transition" data-i18n="nav.testimonials">Depoimentos</a>
-        <a href="#preco" class="block hover:text-[var(--main-blue)] transition" data-i18n="nav.pricing">Preço</a>
-        <a href="#faq" class="block hover:text-[var(--main-blue)] transition">FAQ</a>
-        <button id="openModalCtaMobile" class="w-full btn-primary px-4 py-2" data-i18n="hero.ctaPrimary">Pré‑inscrição</button>
-      </div>
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#topo" class="logo">
+      <div class="logo-snake">🐍</div>
+      <span class="logo-text">Python Básico</span>
+    </a>
+    <nav class="topnav">
+      <a href="#para-quem">Para quem</a>
+      <a href="#conteudo">Programa</a>
+      <a href="#bonus">Bônus</a>
+      <a href="#professora">Professora</a>
+      <a href="#faq">FAQ</a>
     </nav>
-  </header>
+    <a href="#preco" class="btn-cta-sm">Inscreva-se</a>
+    <button class="mobile-btn" id="mobileToggle">Menu ☰</button>
+  </div>
+  <div id="mobileDrawer">
+    <a href="#para-quem" onclick="closeDrawer()">Para quem</a>
+    <a href="#conteudo" onclick="closeDrawer()">Programa</a>
+    <a href="#bonus" onclick="closeDrawer()">Bônus</a>
+    <a href="#professora" onclick="closeDrawer()">Professora</a>
+    <a href="#faq" onclick="closeDrawer()">FAQ</a>
+    <a href="#preco" onclick="closeDrawer()" style="background:var(--blue);color:#fff;padding:.75rem 1rem;border-radius:8px;text-align:center;margin-top:.5rem;">Inscreva-se</a>
+  </div>
+</header>
 
-  <!-- Hero -->
-  <section id="top" class="relative z-10 pt-10 md:pt-16 pb-12 md:pb-20">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-10 items-center">
-      <div class="fade-up">
-        <div class="inline-flex items-center gap-2 chip px-3 py-1.5 text-xs mb-4">
-          <span class="w-1.5 h-1.5 rounded-full bg-[var(--main-blue)]"></span>
-          <span data-i18n="badge.nextCohort">Turma 3 abrindo inscrições</span>
-        </div>
-        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
-          <span class="title-accent" data-i18n="hero.title.highlight">Tutoria de Python</span>
-          <span class="block text-slate-700" data-i18n="hero.title.suffix">Plano Básico • 6 semanas</span>
-        </h1>
-        <p class="mt-5 text-slate-700 text-lg md:text-xl max-w-xl" data-i18n="hero.subtitle">
-          Aprenda programação do zero e crie seu primeiro projeto guiado, com encontros ao vivo e feedback individual.
-        </p>
-        <div class="mt-8 flex flex-col sm:flex-row gap-3">
-        <button
-          id="openFormHero2"
-          class="btn-primary px-4 py-2"
-          data-i18n="hero.ctaPrimary"
-          onclick="openGoogleForm()">
-          Faça sua Pré-inscrição
-        </button>
-          <a href="#conteudo" class="btn-ghost px-6 py-3" data-i18n="hero.ctaSecondary">Ver programa do curso</a>
-        </div>
-
-        <div class="mt-8 grid grid-cols-3 gap-4 max-w-lg">
-          <div class="glass p-4">
-            <p class="text-2xl font-extrabold title-accent">6</p>
-            <p class="text-xs text-slate-600" data-i18n="stats.weeks">semanas</p>
-          </div>
-          <div class="glass p-4">
-            <p class="text-2xl font-extrabold title-accent">100%</p>
-            <p class="text-xs text-slate-600" data-i18n="stats.beginner">para iniciantes</p>
-          </div>
-          <div class="glass p-4">
-            <p class="text-2xl font-extrabold title-accent" data-i18n="stats.project.title">1 projeto</p>
-            <p class="text-xs text-slate-600" data-i18n="stats.project">do início ao fim</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="relative fade-up">
-        <div class="glass rounded-2xl p-6 md:p-8">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-[var(--main-blue)]/10 text-[var(--main-blue)] grid place-items-center text-xl">▶️</div>
-            <p class="font-semibold" data-i18n="hero.demoTitle">Demonstração de aulas e projeto</p>
-          </div>
-          <div class="mt-5 rounded-xl overflow-hidden">
-            <div class="code-panel p-4 text-sm font-mono rounded-xl">
-<pre><code>def saudacao(nome):
-    return f"Olá, {nome}! 👋"
-
-for aluno in ["Raphaela", "Debora"]:
-    print(saudacao(aluno))</code></pre>
-            </div>
-          </div>
-          <p class="mt-4 text-sm text-slate-600" data-i18n="hero.demoNote">Você aprenderá a escrever, executar e entender cada linha.</p>
-        </div>
-        <div class="absolute -top-6 -right-6">
-          <div class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--main-blue)] text-white shadow" aria-hidden="true" data-i18n="hero.demoNote1">Ao vivo + suporte</div>
-        </div>
+<!-- HERO -->
+<section id="topo">
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow"><span></span>Turma 3 · Maio 2026 · 100% para iniciantes</div>
+      <h1 class="hero-title">
+        Aprenda a<br/><em>programar</em><br/>do zero
+      </h1>
+      <p class="hero-sub">
+        8 semanas, um projeto financeiro real, terminal e interface visual. Você sai sabendo programar — com um app funcionando para mostrar.
+      </p>
+      <div class="hero-actions">
+        <a href="#preco" class="btn-primary">Inscreva-se</a>
+        <a href="#conteudo" class="btn-ghost">Ver o programa</a>
       </div>
     </div>
-  </section>
 
-  <!-- Benefits -->
-  <section class="relative z-10 py-12 md:py-16">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <h2 class="text-2xl md:text-3xl font-extrabold title-accent" data-i18n="benefits.title">Por que este programa funciona</h2>
-      <div class="mt-8 grid md:grid-cols-3 gap-6">
-        <div class="glass p-6">
-          <div class="w-10 h-10 rounded-lg bg-[var(--main-blue)]/10 text-[var(--main-blue)] grid place-items-center text-2xl">🧭</div>
-          <h3 class="mt-4 font-bold" data-i18n="benefits.guided.title">Trilha guiada</h3>
-          <p class="text-slate-700 text-sm" data-i18n="benefits.guided.desc">Passo a passo claro do zero até seu primeiro projeto.</p>
-        </div>
-        <div class="glass p-6">
-          <div class="w-10 h-10 rounded-lg bg-[var(--main-blue)]/10 text-[var(--main-blue)] grid place-items-center text-2xl">💬</div>
-          <h3 class="mt-4 font-bold" data-i18n="benefits.feedback.title">Feedback real</h3>
-          <p class="text-slate-700 text-sm" data-i18n="benefits.feedback.desc">Correções e dicas práticas diretamente no seu código.</p>
-        </div>
-        <div class="glass p-6">
-          <div class="w-10 h-10 rounded-lg bg-[var(--main-blue)]/10 text-[var(--main-blue)] grid place-items-center text-2xl">⏱️</div>
-          <h3 class="mt-4 font-bold" data-i18n="benefits.short.title">6 semanas</h3>
-          <p class="text-slate-700 text-sm" data-i18n="benefits.short.desc">Objetivo claro com tempo definido para manter o foco.</p>
-        </div>
+    <div class="hero-card">
+      <div class="hero-card-label">Investimento</div>
+      <div class="price-big">R$&nbsp;897</div>
+      <div class="price-sub">em até 3× &nbsp;·&nbsp; ou CA$ 260</div>
+      <div class="code-block">
+        <span class="kw">def</span> registrar_gasto(valor, categoria):<br/>
+        &nbsp;&nbsp;<span class="kw">return</span> {<span class="st">"valor"</span>: valor,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">"categoria"</span>: categoria}<br/>
+        <br/>
+        <span class="kw">import</span> streamlit <span class="kw">as</span> st<br/>
+        st.metric(<span class="st">"Saldo do mês"</span>, <span class="st">"R$ 1.240"</span>)
       </div>
-    </div>
-  </section>
-
-  <!-- Program -->
-  <section id="conteudo" class="relative z-10 py-12 md:py-16">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="flex items-end justify-between gap-6">
-        <h2 class="text-2xl md:text-3xl font-extrabold title-accent" data-i18n="program.title">Programa em 6 semanas</h2>
-        <a href="#preco" class="hidden md:inline-flex btn-ghost px-4 py-2" data-i18n="program.cta">Garantir minha vaga</a>
-      </div>
-      <div class="mt-8 grid lg:grid-cols-3 gap-6">
-        <div class="glass p-6">
-          <h3 class="font-bold title-accent" data-i18n="week.w1">Semana 1</h3>
-          <p class="text-sm mt-1" data-i18n="program.w1">Fundamentos, variáveis, tipos, input/output.</p>
-          <div class="mt-4 text-xs text-slate-600"  data-i18n="deliverable.w1"><strong>Entregável 1 — Briefing & Protótipo do Menu (setup do projeto)</strong></div>
-        </div>
-        <div class="glass p-6">
-          <h3 class="font-bold title-accent" data-i18n="week.w2">Semana 2</h3>
-          <p class="text-sm mt-1" data-i18n="program.w2">Estruturas de Decisão</p>
-          <div class="mt-4 text-xs text-slate-600"  data-i18n="deliverable.w2"><strong>Entregável 2 — Cadastro/Status de Tarefas (condicionais)</strong></div>
-        </div>
-        <div class="glass p-6">
-          <h3 class="font-bold title-accent" data-i18n="week.w3">Semana 3</h3>
-          <p class="text-sm mt-1" data-i18n="program.w3">Laços de Repetição</p>
-          <div class="mt-4 text-xs text-slate-600" data-i18n="deliverable.w3" ><strong>Entregável 3 — Ciclo de Uso e Validações (loops)</strong></div>
-        </div>
-        <div class="glass p-6">
-          <h3 class="font-bold title-accent" data-i18n="week.w4">Semana 4</h3>
-          <p class="text-sm mt-1" data-i18n="program.w4">Funções</p>
-          <div class="mt-4 text-xs text-slate-600"  data-i18n="deliverable.w4" ><strong>Entregável 4 — Modularização com Funções (arquitetura básica)</strong></div>
-        </div>
-        <div class="glass p-6">
-          <h3 class="font-bold title-accent" data-i18n="week.w5">Semana 5</h3>
-          <p class="text-sm mt-1" data-i18n="program.w5">Listas, Dicionários e Manipulação de Strings</p>
-          <div class="mt-4 text-xs text-slate-600"  data-i18n="deliverable.w5"><strong>Entregável 5 — Persistência & Relatórios (listas/dicionários + strings)</strong></div>
-        </div>
-        <div class="glass p-6">
-          <h3 class="font-bold title-accent" data-i18n="week.w6">Semana 6</h3>
-          <p class="text-sm mt-1" data-i18n="program.w6"> Finalização do Projeto e Continuação da Jornada</p>
-          <div class="mt-4 text-xs text-slate-600"  data-i18n="deliverable.w6"><strong>Entregável Final — Demo, README e Checklist de Qualidade</strong></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="sobre" class="relative z-10 py-12 md:py-16">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
-      <div class="glass p-6 md:p-8">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 rounded-xl bg-[var(--main-blue)] text-white grid place-items-center text-2xl">👩‍🏫</div>
-          <div>
-            <h3 class="font-extrabold text-xl title-accent" data-i18n="about.title">Sua professora</h3>
-            <p class="text-slate-600 text-sm" data-i18n="about.subtitle">Doutoranda emComputação • +10 anos ensinando</p>
-          </div>
-        </div>
-        <p class="mt-5 text-slate-700" data-i18n="about.text">
-          Olá! Eu ajudo iniciantes a começarem com programação de forma prática e confiante.
-          Você terá encontros ao vivo, materiais objetivos e feedback direto para evoluir do zero ao seu primeiro projeto.
-        </p>
-        <ul class="mt-5 space-y-2 text-slate-700 text-sm">
-          <li>• <span data-i18n="about.point1">Aulas ao vivo gravadas</span></li>
-          <li>• <span data-i18n="about.point2">Suporte rápido em comunidade</span></li>
-          <li>• <span data-i18n="about.point3">Roteiro claro e sem enrolação</span></li>
-        </ul>
-      </div>
-      <div class="grid gap-6">
-        <div class="glass p-6">
-          <h4 class="font-bold title-accent" data-i18n="outcomes.title">Você sairá sabendo</h4>
-          <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm text-slate-700">
-            <div class="flex items-center gap-2"><span>✅</span><span data-i18n="outcomes.o1">Lógica e estruturas básicas</span></div>
-            <div class="flex items-center gap-2"><span>✅</span><span data-i18n="outcomes.o2">Escrever funções reutilizáveis</span></div>
-            <div class="flex items-center gap-2"><span>✅</span><span data-i18n="outcomes.o3">Trabalhar com arquivos</span></div>
-            <div class="flex items-center gap-2"><span>✅</span><span data-i18n="outcomes.o4">Finalizar um projeto próprio</span></div>
-          </div>
-        </div>
-        <div class="glass p-6">
-          <h4 class="font-bold title-accent" data-i18n="extras.title">Extras incluídos</h4>
-          <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm text-slate-700">
-            <div class="flex items-center gap-2"><span>🎯</span><span data-i18n="extras.e1">Checklist de estudos</span></div>
-            <div class="flex items-center gap-2"><span>📚</span><span data-i18n="extras.e2">Material de apoio</span></div>
-            <div class="flex items-center gap-2"><span>🧪</span><span data-i18n="extras.e3">Exercícios práticos</span></div>
-            <div class="flex items-center gap-2"><span>💡</span><span data-i18n="extras.e4">Ideias de projetos</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- Pricing -->
-  <!-- Pricing + FAQ lado a lado -->
-  <section id="preco" class="relative z-10 py-12 md:py-16">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <h2 class="text-2xl md:text-3xl font-extrabold title-accent" data-i18n="pricing.title">Preço e vagas</h2>
-
-      <div class="mt-8 grid md:grid-cols-2 gap-6">
-        <!-- Coluna: Investimento -->
-        <div class="glass p-6 md:p-8">
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--main-blue)] text-white text-xs font-bold"  data-i18n="pricing.type.package">Básico</div>
-          <p class="mt-4 text-4xl font-extrabold title-accent">202 CAD - R$ 697 (em até 2X) </p>
-
-          <ul class="mt-4 space-y-2 text-slate-800">
-            <li>✅ AS AULAS SÃO ONLINE E FICAM DISPONÍVEIS DURANTE O CURSO E MAIS 30 DIAS</span></li>
-            <li>✅ todas as tercas começando no dia 05/05/2026 das 19:00 as 21:00 (horario do BR)</span></li>
-            <li>✅ <span data-i18n="pricing.f1">6 encontros ao vivo (1x por semana)</span></li>
-            <li>✅ <span data-i18n="pricing.f2">Acesso às gravações</span></li>
-            <li>✅ <span data-i18n="pricing.f3">Feedback no projeto final</span></li>
-            <li>✅ <span data-i18n="pricing.f4">Comunidade para dúvidas</span></li>
-
-          </ul>
-
-          <div class="mt-6 flex flex-col sm:flex-row gap-3">
-<button
-  id="openFormHero3"
-  class="btn-primary px-4 py-2"
-  data-i18n="hero.ctaPrimary"
-  onclick="openGoogleForm()"
->
-  Pré-inscrição
-</button>          </div>
-
-          <p class="text-xs text-slate-600 mt-3" data-i18n="pricing.disclaimer">
-            Após preencher o formulário, você receberá as informações para o pagamento.
-          </p>
-        </div>
-
-        <!-- Coluna: FAQ (mantém o âncora #faq) -->
-        <div id="faq" class="glass p-6 md:p-8">
-          <h3 class="text-xl md:text-2xl font-extrabold title-accent">FAQ</h3>
-          <div class="mt-6 space-y-3">
-            <details class="glass p-4 group">
-              <summary class="cursor-pointer font-semibold list-none flex items-center justify-between">
-                <span data-i18n="faq.q1">Preciso saber programar?</span>
-                <span class="text-slate-500 group-open:rotate-180 transition">⌄</span>
-              </summary>
-              <p class="mt-2 text-slate-700 text-sm" data-i18n="faq.a1">Não! O curso começa do zero e evolui no ritmo certo.</p>
-            </details>
-
-            <details class="glass p-4 group">
-              <summary class="cursor-pointer font-semibold list-none flex items-center justify-between">
-                <span data-i18n="faq.q2">As aulas são ao vivo?</span>
-                <span class="text-slate-500 group-open:rotate-180 transition">⌄</span>
-              </summary>
-              <p class="mt-2 text-slate-700 text-sm" data-i18n="faq.a2">Sim, com gravações disponíveis no dia seguinte.</p>
-            </details>
-
-            <details class="glass p-4 group">
-              <summary class="cursor-pointer font-semibold list-none flex items-center justify-between">
-                <span data-i18n="faq.q3">Como tiro dúvidas?</span>
-                <span class="text-slate-500 group-open:rotate-180 transition">⌄</span>
-              </summary>
-              <p class="mt-2 text-slate-700 text-sm" data-i18n="faq.a3">Você terá uma comunidade e momentos dedicados a perguntas.</p>
-            </details>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="relative z-10 border-t border-[rgba(30,58,138,0.15)]">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg grid place-items-center bg-[var(--main-blue)] text-white text-lg font-black">🐍</div>
-        <div class="text-slate-600 text-sm">Python Tutoria • 2025</div>
-      </div>
-      <div class="flex items-center gap-4 text-sm">
-<!--        <a href="https://example.com" target="_blank" rel="noopener noreferrer" class="footer-link">Site</a>-->
-        <a href="https://www.instagram.com/marceladossantos.prof/;" target="_blank" rel="noopener noreferrer" class="footer-link">Instagram</a>
-        <a href="https://www.youtube.com/MarcelaDosSantos" target="_blank" rel="noopener noreferrer" class="footer-link">YouTube</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Modal -->
-  <div id="modalOverlay" class="hidden fixed inset-0 z-50 bg-black/40"></div>
-  <div id="modal" class="hidden fixed inset-0 z-50 grid place-items-center px-6">
-    <div class="w-full max-w-lg glass p-6 md:p-8 relative">
-      <button id="closeModal" class="btn-ghost absolute top-3 right-3 px-3 py-1 text-sm" aria-label="Fechar">✕</button>
-      <h3 class="text-2xl font-extrabold title-accent" data-i18n="form.title">Pré‑inscrição</h3>
-      <p class="text-slate-700 mt-1 text-sm" data-i18n="form.subtitle">Preencha e eu retorno com os próximos passos.</p>
-      <form id="preForm" class="mt-5 space-y-4">
-        <div>
-          <label for="nome" class="block text-sm mb-1" data-i18n="form.nameLabel">Seu nome</label>
-          <input id="nome" name="nome" required class="input" placeholder="Seu nome"/>
-        </div>
-        <div>
-          <label for="email" class="block text-sm mb-1">Email</label>
-          <input id="email" name="email" type="email" required class="input" placeholder="voce@email.com"/>
-        </div>
-        <div>
-          <label for="objetivo" class="block text-sm mb-1" data-i18n="form.goalLabel">Seu objetivo</label>
-          <select id="objetivo" name="objetivo" class="input">
-            <option data-i18n="form.goal1">Primeiro contato com programação</option>
-            <option data-i18n="form.goal2">Mudar de carreira</option>
-            <option data-i18n="form.goal3">Projeto pessoal</option>
-          </select>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-3 pt-2">
-          <button type="submit" class="btn-primary px-5 py-3" data-i18n="form.submit">Enviar interesse</button>
-          <button type="button" id="openFormExternal2" class="btn-ghost px-5 py-3 font-semibold" data-i18n="form.alt">Abrir Google Form</button>
-        </div>
-        <p class="text-xs text-slate-600" data-i18n="form.note">Este é um envio de demonstração (sem servidor). Você verá uma confirmação.</p>
-      </form>
+      <p class="code-note">Terminal + interface visual. As duas formas de programar.</p>
+      <ul class="card-checks" style="margin-top:1.25rem;">
+        <li><span class="chk">✓</span> Início 11/06/2026, quintas 19h–21h</li>
+        <li><span class="chk">✓</span> 8 encontros ao vivo · 2h/semana</li>
+        <li><span class="chk">✓</span> 90 dias de acesso às gravações</li>
+        <li><span class="chk">✓</span> Projeto financeiro real do início ao fim</li>
+        <li><span class="chk">✓</span> Terminal + Streamlit em cada semana</li>
+        <li><span class="chk">✓</span> IA como ferramenta de estudos</li>
+        <li><span class="chk">✓</span> Feedback individual no projeto final</li>
+      </ul>
+      <a href="#preco" class="btn-card">Inscreva-se</a>
+      <p class="card-note">Vagas limitadas · Turma 3 · Junho 2026</p>
     </div>
   </div>
+</section>
 
-  <!-- Toast -->
-  <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] toast-success font-semibold px-4 py-2 rounded-lg shadow">Inscrição registrada! 🎉</div>
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><span class="stat-num">8</span><span class="stat-label">semanas de curso</span></div>
+    <div class="stat"><span class="stat-num">8</span><span class="stat-label">entregáveis semanais</span></div>
+    <div class="stat"><span class="stat-num">1</span><span class="stat-label">app financeiro real</span></div>
+    <div class="stat"><span class="stat-num">14+</span><span class="stat-label">anos ensinando</span></div>
+  </div>
+</div>
 
-  <script>
-    // i18n
-    const i18n = {
-      pt: {
-        'principal.title.aba':'Comece do Zero e Domine o Básico',
-      'principal.title': 'Python Básico',
-         'principal.title.sub': 'Do zero ao seu primeiro projeto',
-        'nav.about': 'Sobre',
-        'nav.content': 'Conteúdo',
-        'nav.testimonials': 'Depoimentos',
-        'nav.pricing': 'Preço',
-        'badge.nextCohort': 'Turma 3 abrindo inscrições',
-        'hero.demoNote1': 'Ao vivo + suporte',
-        'hero.title.highlight': 'Tutoria de Python',
-        'hero.title.suffix': 'Plano Básico • 6 semanas',
-        'hero.subtitle': 'Aprenda programação do zero e crie seu primeiro projeto guiado, com encontros ao vivo e feedback individual.',
-        'hero.ctaPrimary': 'Faça sua Pré‑Inscrição',
-        'hero.ctaSecondary': 'Ver programa do curso',
-        'stats.weeks': 'semanas',
-         'stats.project.title': '1  projeto',
-        'stats.beginner': 'para iniciantes',
-        'stats.project': 'do início ao fim',
-        'hero.demoTitle': 'Demonstração de aulas e projeto',
-        'hero.demoNote': 'Você aprenderá a escrever, executar e entender cada linha.',
-        'benefits.title': 'Por que este programa funciona',
-        'benefits.guided.title': 'Trilha guiada',
-        'benefits.guided.desc': 'Passo a passo claro do zero até seu primeiro projeto.',
-        'benefits.feedback.title': 'Feedback real',
-        'benefits.feedback.desc': 'Correções e dicas práticas diretamente no seu código.',
-        'benefits.short.title': '6 semanas',
-        'benefits.short.desc': 'Objetivo claro com tempo definido para manter o foco.',
-        'program.title': 'Programa em 6 semanas',
-        'program.cta': 'Garantir minha vaga',
-        'program.w1': 'Fundamentos, variáveis, tipos, input/output.',
-        'program.w2': 'Condições, loops, listas e dicionários.',
-        'program.w3': 'Funções, organização e boas práticas.',
-        'program.w4': 'Arquivos, erros e módulos.',
-        'program.w5': 'Bibliotecas populares e APIs locais.',
-        'program.w6': 'Projeto final guiado e apresentação.',
-        'about.title': 'Sua professora',
-        'about.subtitle': 'Dev Python • +5 anos ensinando',
-        'about.text': 'Olá! Eu ajudo iniciantes a começarem com programação de forma prática e confiante. Você terá encontros ao vivo, materiais objetivos e feedback direto para evoluir do zero ao seu primeiro projeto.',
-        'about.point1': 'Aulas ao vivo gravadas',
-        'about.point2': 'Suporte rápido em comunidade',
-        'about.point3': 'Roteiro claro e sem enrolação',
-        'outcomes.title': 'Você sairá sabendo',
-        'outcomes.o1': 'Lógica e estruturas básicas',
-        'outcomes.o2': 'Escrever funções reutilizáveis',
-        'outcomes.o3': 'Trabalhar com arquivos',
-        'outcomes.o4': 'Finalizar um projeto próprio',
-        'extras.title': 'Extras incluídos',
-        'extras.e1': 'Checklist de estudos',
-        'extras.e2': 'Material de apoio',
-        'extras.e3': 'Exercícios práticos',
-        'extras.e4': 'Ideias de projetos',
-        'testimonials.title': 'O que alunos dizem',
-        'pricing.type.package': 'Básico',
-        'pricing.title': 'Preço e vagas',
-        'pricing.note': 'em até 12x no cartão (externo)',
-        'pricing.f1': '6 encontros ao vivo (1x por semana)',
-        'pricing.f2': 'Acesso às gravações',
-        'pricing.f3': 'Feedback no projeto final',
-        'pricing.f4': 'Comunidade para dúvidas',
-        'pricing.cta': 'Quero me inscrever',
-        'pricing.form': 'Prefiro Google Form',
-        'pricing.disclaimer': 'Pagamento é feito por plataforma segura externa (link abre em nova aba).',
-        'guarantee.title': 'Garantia',
-        'guarantee.copy': 'Se na primeira semana você sentir que não é para você, cancele sem custo. Sem perguntas.',
-        'cohort.title': 'Vagas limitadas',
-        'cohort.copy': 'Turmas pequenas para atenção individual.',
-        'faq.q1': 'Preciso saber programar?',
-        'faq.a1': 'Não! O curso começa do zero e evolui no ritmo certo.',
-        'faq.q2': 'As aulas são ao vivo?',
-        'faq.a2': 'Sim, com gravações disponíveis no dia seguinte.',
-        'faq.q3': 'Como tiro dúvidas?',
-        'faq.a3': 'Você terá uma comunidade e momentos dedicados a perguntas.',
-        'form.title': 'Pré‑inscrição',
-        'form.subtitle': 'Preencha e eu retorno com os próximos passos.',
-        'form.nameLabel': 'Seu nome',
-        'form.goalLabel': 'Seu objetivo',
-        'form.goal1': 'Primeiro contato com programação',
-        'form.goal2': 'Mudar de carreira',
-        'form.goal3': 'Projeto pessoal',
-        'form.submit': 'Enviar interesse',
-        'form.alt': 'Abrir Google Form',
-        'week.w1': 'Semana 1',
-        'week.w2': 'Semana 2',
-        'week.w3': 'Semana 3',
-        'week.w4': 'Semana 4',
-        'week.w5': 'Semana 5',
-        'week.w6': 'Semana 6',
-        'deliverable.w1': 'Entregável 1 — Briefing & Protótipo do Menu (setup do projeto)',
-        'deliverable.w2': 'Entregável 2 — Cadastro/Status de Tarefas (condicionais)',
-        'deliverable.w3': 'Entregável 3 — Ciclo de Uso e Validações (loops)',
-        'deliverable.w4': 'Entregável 4 — Modularização com Funções (arquitetura básica)',
-        'deliverable.w5': 'Entregável 5 — Persistência & Relatórios (listas/dicionários + strings)',
-        'deliverable.w6': 'Entregável Final — Demo, README e Checklist de Qualidade',
-        'form.note': 'Este é um envio de demonstração (sem servidor). Você verá uma confirmação.'
-      },
-      en: {
-         'principal.title.aba':'From Scratch to Strong Python Foundations',
-         'principal.title': 'Python Basic',
-         'principal.title.sub': 'From Zero to Your First Project',
-        'nav.about': 'About',
-        'nav.content': 'Content',
-        'nav.testimonials': 'Testimonials',
-        'nav.pricing': 'Pricing',
-        'badge.nextCohort': 'Cohort 3 opening soon',
-          'hero.demoNote1': 'Live classes with personalized support',
-        'hero.title.highlight': 'Python Tutoring',
-        'hero.title.suffix': 'Starter Plan • 6 weeks',
-        'hero.subtitle': 'Learn from scratch and build your first guided project with live sessions and personal feedback.',
-        'hero.ctaPrimary': 'Pre‑Register',
-        'hero.ctaSecondary': 'View curriculum',
-        'stats.weeks': 'weeks',
-        'stats.beginner': 'for beginners',
-        'stats.project': 'from start to finish',
-         'stats.project.title': '1  project',
-        'hero.demoTitle': 'Class & project preview',
-        'hero.demoNote': 'You will write, run and understand each line.',
-        'benefits.title': 'Why this program works',
-        'benefits.guided.title': 'Guided path',
-        'benefits.guided.desc': 'Step‑by‑step from zero to your first project.',
-        'benefits.feedback.title': 'Real feedback',
-        'benefits.feedback.desc': 'Corrections and practical tips right on your code.',
-        'benefits.short.title': '6 weeks',
-        'benefits.short.desc': 'Clear goal with a defined timeline.',
-        'program.title': '6‑week program',
-        'program.cta': 'Secure my seat',
-        'week.w1': 'Week 1',
-        'week.w2': 'Week 2',
-        'week.w3': 'Week 3',
-        'week.w4': 'Week 4',
-        'week.w5': 'Week 5',
-        'week.w6': 'Week 6',
-        'program.w1': 'Basics, variables, types, input/output.',
-        'program.w2': 'Conditions, loops, lists and dicts.',
-        'program.w3': 'Functions, structure and best practices.',
-        'program.w4': 'Files, errors and modules.',
-        'program.w5': 'Popular libraries and local APIs.',
-        'program.w6': 'Final guided project and presentation.',
-        'deliverable.w1': 'Deliverable 1 — Menu Briefing & Prototype (project setup)',
-        'deliverable.w2': 'Deliverable 2 — Task Registration/Status (conditional)',
-        'deliverable.w3': 'Deliverable 3 — Usage and Validation Cycle (loops)',
-        'deliverable.w4': 'Deliverable 4 — Modularization with Functions (basic architecture)',
-        'deliverable.w5': 'Deliverable 5 — Persistence & Reports (lists/dictionaries + strings)',
-        'deliverable.w6': 'Final Deliverable — Demo, README, and Quality Checklist',
-        'about.title': 'Your instructor',
-        'about.subtitle': 'Python dev • 5+ years teaching',
-        'about.text': 'Hi! I help beginners start coding with confidence. You get live sessions, straight‑to‑the‑point materials and direct feedback to go from zero to your first project.',
-        'about.point1': 'Live classes with recordings',
-        'about.point2': 'Quick support in community',
-        'about.point3': 'Clear roadmap, no fluff',
-        'outcomes.title': 'You will be able to',
-        'outcomes.o1': 'Logic and basic structures',
-        'outcomes.o2': 'Write reusable functions',
-        'outcomes.o3': 'Work with files',
-        'outcomes.o4': 'Deliver your own project',
-        'extras.title': 'Included extras',
-        'extras.e1': 'Study checklist',
-        'extras.e2': 'Supporting materials',
-        'extras.e3': 'Hands‑on exercises',
-        'extras.e4': 'Project ideas',
-        'testimonials.title': 'What students say',
-        'pricing.title': 'Pricing & seats',
-        'pricing.note': 'up to 12x on card (external)',
-        'pricing.f1': '6 live sessions (weekly)',
-        'pricing.f2': 'Access to recordings',
-        'pricing.f3': 'Feedback on final project',
-        'pricing.f4': 'Community for questions',
-        'pricing.cta': 'I want in',
-        'pricing.form': 'Prefer Google Form',
-        'pricing.type.package': 'Basic',
-        'pricing.disclaimer': 'Payment is processed by a secure external platform (opens in a new tab).',
-        'guarantee.title': 'Guarantee',
-        'guarantee.copy': 'If after week 1 it’s not for you, cancel with no cost. No questions asked.',
-        'cohort.title': 'Limited seats',
-        'cohort.copy': 'Small cohorts for individual attention.',
-        'faq.q1': 'Do I need prior experience?',
-        'faq.a1': 'No! We start from absolute zero and progress at a solid pace.',
-        'faq.q2': 'Are classes live?',
-        'faq.a2': 'Yes, with recordings available the next day.',
-        'faq.q3': 'How do I ask questions?',
-        'faq.a3': 'You’ll have a community and dedicated Q&A moments.',
-        'form.title': 'Pre‑registration',
-        'form.subtitle': 'Fill this out and I’ll send next steps.',
-        'form.nameLabel': 'Your name',
-        'form.goalLabel': 'Your goal',
-        'form.goal1': 'First contact with coding',
-        'form.goal2': 'Career change',
-        'form.goal3': 'Personal project',
-        'form.submit': 'Send interest',
-        'form.alt': 'Open Google Form',
-        'form.note': 'This is a demo submission (no server). You’ll see a confirmation.'
-      }
-    };
+<!-- POR QUE FUNCIONA -->
+<section class="section reveal">
+  <h2 class="section-title">Por que este programa funciona</h2>
+  <p class="section-sub">Não é mais um curso gravado que você abandona na semana 2.</p>
+  <div class="grid-border">
+    <div class="grid-item">
+      <div class="grid-icon">🖥️</div>
+      <h3>Terminal + interface visual</h3>
+      <p>Toda semana você pratica no terminal E vê o resultado aparecer no app. A lógica e o visual juntos desde o primeiro dia.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">📈</div>
+      <h3>Projeto que cresce com você</h3>
+      <p>O organizador financeiro começa simples na semana 1 e vira um app completo com gráficos na semana 8. Você vê o progresso toda semana.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">💬</div>
+      <h3>Feedback real no seu código</h3>
+      <p>Correções e dicas diretas no que você escreveu. Você evolui com orientação, não só tentativa e erro.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">🤖</div>
+      <h3>IA como par de estudos</h3>
+      <p>Aprenda a usar IA para entender erros, pedir explicações e evoluir mais rápido — sem virar dependente.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">🎯</div>
+      <h3>Objetivo claro toda semana</h3>
+      <p>Entregável toda semana. Prazo definido e progresso visível — ideal para quem tem rotina cheia.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">🤝</div>
+      <h3>Comunidade ativa</h3>
+      <p>Aprenda junto com outras mulheres no mesmo ponto da jornada. Suporte rápido, sem julgamento.</p>
+    </div>
+  </div>
+</section>
 
-  const currentLang='pt'
-    document.addEventListener('DOMContentLoaded', () => {
+<!-- PARA QUEM -->
+<section id="para-quem" class="section reveal" style="border-top:1px solid var(--border-dk);padding-top:4rem;">
+  <h2 class="section-title">Este curso é para você se…</h2>
+  <p class="section-sub">O objetivo é aprender a programar — independente do que você vai fazer com isso depois.</p>
+  <div class="grid-border">
+    <div class="grid-item">
+      <div class="grid-icon">🌱</div>
+      <h3>Nunca programou</h3>
+      <p>O curso começa do absoluto zero. Nenhuma experiência anterior necessária.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">💡</div>
+      <h3>Tentou aprender sozinha e travou</h3>
+      <p>Ficou perdida em tutoriais aleatórios? Aqui tem trilha, estrutura e professora respondendo.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">⏰</div>
+      <h3>Tem vida intensa</h3>
+      <p>2h por semana ao vivo, gravações por 90 dias. Pensado para quem tem trabalho, filhos e rotina cheia.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">🔄</div>
+      <h3>Quer entrar em tecnologia</h3>
+      <p>Está em transição de carreira e precisa de uma base sólida para começar na área tech.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">🎯</div>
+      <h3>Quer ver resultado de verdade</h3>
+      <p>Não quer só assistir aula — quer construir algo real, ver funcionar e ter algo concreto ao final.</p>
+    </div>
+    <div class="grid-item">
+      <div class="grid-icon">💰</div>
+      <h3>Quer autonomia financeira</h3>
+      <p>O projeto do curso é um organizador financeiro pessoal — você aprende programando algo útil para sua própria vida.</p>
+    </div>
+  </div>
+</section>
 
+<!-- PROGRAMA -->
+<section id="conteudo" class="section reveal" style="background:rgba(255,255,255,.02);padding-top:4rem;padding-bottom:4rem;max-width:100%;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+    <h2 class="section-title">8 semanas · Terminal + Streamlit · Um projeto do início ao fim</h2>
+    <p class="section-sub">Toda semana: conceito no terminal + resultado visual no app. O organizador financeiro cresce junto com você.</p>
+
+    <!-- legenda -->
+    <div style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--blue);">
+        <div style="width:12px;height:12px;border-radius:3px;background:rgba(147,197,253,.15);border:1px solid rgba(147,197,253,.3);flex-shrink:0;"></div>
+        Terminal — lógica e código
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--red);">
+        <div style="width:12px;height:12px;border-radius:3px;background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.3);flex-shrink:0;"></div>
+        Streamlit — interface visual
+      </div>
+    </div>
+
+    <div class="semanas-list">
+
+      <!-- S1 -->
+      <div class="semana">
+        <button class="semana-btn acc-semana">
+          <span class="semana-num-badge">01</span>
+          <div class="semana-meta">
+            <div class="semana-name">Fundamentos + setup sem estresse</div>
+            <div class="semana-sub">Variáveis, tipos, input/output · Primeiro elemento no app</div>
+          </div>
+          <span class="semana-arrow">▾</span>
+        </button>
+        <div class="semana-body">
+          <div class="aula-cols">
+            <div class="aula-col aula-col-terminal">
+              <span class="aula-col-label">Terminal</span>
+              <ul>
+                <li><span class="dot">●</span>Instalação do Python sem travar</li>
+                <li><span class="dot">●</span>Variáveis e tipos de dados</li>
+                <li><span class="dot">●</span>Input e output básicos</li>
+                <li><span class="dot">●</span>Estrutura do projeto financeiro</li>
+              </ul>
+            </div>
+            <div class="aula-col aula-col-streamlit">
+              <span class="aula-col-label">Streamlit</span>
+              <ul>
+                <li><span class="dot">●</span>Instalação e primeiro <code>st.run</code></li>
+                <li><span class="dot">●</span>Título, texto e input no app</li>
+                <li><span class="dot">●</span>App exibe nome e saldo inicial</li>
+              </ul>
+            </div>
+          </div>
+          <div class="entregavel"><strong>Entregável 1</strong>App abre, exibe nome e saldo inicial — "já existe algo na tela"</div>
+        </div>
+      </div>
+
+      <!-- S2 -->
+      <div class="semana">
+        <button class="semana-btn acc-semana">
+          <span class="semana-num-badge">02</span>
+          <div class="semana-meta">
+            <div class="semana-name">Estruturas de decisão</div>
+            <div class="semana-sub">Condicionais · App classifica e alerta</div>
+          </div>
+          <span class="semana-arrow">▾</span>
+        </button>
+        <div class="semana-body">
+          <div class="aula-cols">
+            <div class="aula-col aula-col-terminal">
+              <span class="aula-col-label">Terminal</span>
+              <ul>
+                <li><span class="dot">●</span>if, elif, else</li>
+                <li><span class="dot">●</span>Classificar: receita ou gasto</li>
+                <li><span class="dot">●</span>Verificar se saldo ficou negativo</li>
+              </ul>
+            </div>
+            <div class="aula-col aula-col-streamlit">
+              <span class="aula-col-label">Streamlit</span>
+              <ul>
+                <li><span class="dot">●</span>Selectbox para tipo de transação</li>
+                <li><span class="dot">●</span>Alerta visual vermelho se saldo negativo</li>
+                <li><span class="dot">●</span><code>st.warning</code> e <code>st.success</code></li>
+              </ul>
+            </div>
+          </div>
+          <div class="entregavel"><strong>Entregável 2</strong>App classifica a transação e exibe alerta colorido de saldo negativo</div>
+        </div>
+      </div>
+
+      <!-- S3 -->
+      <div class="semana">
+        <button class="semana-btn acc-semana">
+          <span class="semana-num-badge">03</span>
+          <div class="semana-meta">
+            <div class="semana-name">Laços de repetição</div>
+            <div class="semana-sub">Loops · App lista todas as transações</div>
+          </div>
+          <span class="semana-arrow">▾</span>
+        </button>
+        <div class="semana-body">
+          <div class="aula-cols">
+            <div class="aula-col aula-col-terminal">
+              <span class="aula-col-label">Terminal</span>
+              <ul>
+                <li><span class="dot">●</span>for e while na prática</li>
+                <li><span class="dot">●</span>Percorrer lista de transações</li>
+                <li><span class="dot">●</span>Calcular total de gastos e receitas</li>
+              </ul>
+            </div>
+            <div class="aula-col aula-col-streamlit">
+              <span class="aula-col-label">Streamlit</span>
+              <ul>
+                <li><span class="dot">●</span>Tabela com todas as transações</li>
+                <li><span class="dot">●</span>Métricas de total no topo do app</li>
+                <li><span class="dot">●</span><code>st.dataframe</code> e <code>st.metric</code></li>
+              </ul>
+            </div>
+          </div>
+          <div class="entregavel"><strong>Entregável 3</strong>App exibe tabela de transações e totais calculados automaticamente</div>
+        </div>
+      </div>
+
+      <!-- S4 -->
+      <div class="semana">
+        <button class="semana-btn acc-semana">
+          <span class="semana-num-badge">04</span>
+          <div class="semana-meta">
+            <div class="semana-name">Funções</div>
+            <div class="semana-sub">Modularização · Botões conectados à lógica</div>
+          </div>
+          <span class="semana-arrow">▾</span>
+        </button>
+        <div class="semana-body">
+          <div class="aula-cols">
+            <div class="aula-col aula-col-terminal">
+              <span class="aula-col-label">Terminal</span>
+              <ul>
+                <li><span class="dot">●</span>Criar e chamar funções</li>
+                <li><span class="dot">●</span>Funções: adicionar gasto, calcular saldo, gerar resumo</li>
+                <li><span class="dot">●</span>Parâmetros e retorno de valores</li>
+              </ul>
+            </div>
+            <div class="aula-col aula-col-streamlit">
+              <span class="aula-col-label">Streamlit</span>
+              <ul>
+                <li><span class="dot">●</span>Botões conectados às funções</li>
+                <li><span class="dot">●</span>Formulário de nova transação organizado</li>
+                <li><span class="dot">●</span><code>st.button</code> e <code>st.form</code></li>
+              </ul>
+            </div>
+          </div>
+          <div class="entregavel"><strong>Entregável 4</strong>App com formulário funcional — usuária adiciona transação clicando em botão</div>
+        </div>
+      </div>
+
+      <!-- S5 -->
+      <div class="semana">
+        <button class="semana-btn acc-semana">
+          <span class="semana-num-badge">05</span>
+          <div class="semana-meta">
+            <div class="semana-name">Listas, dicionários e strings</div>
+            <div class="semana-sub">Estruturas de dados · Resumo por categoria</div>
+          </div>
+          <span class="semana-arrow">▾</span>
+        </button>
+        <div class="semana-body">
+          <div class="aula-cols">
+            <div class="aula-col aula-col-terminal">
+              <span class="aula-col-label">Terminal</span>
+              <ul>
+                <li><span class="dot">●</span>Listas e dicionários na prática</li>
+                <li><span class="dot">●</span>Agrupar transações por categoria</li>
+                <li><span class="dot">●</span>Formatar strings para relatório</li>
+              </ul>
+            </div>
+            <div class="aula-col aula-col-streamlit">
+              <span class="aula-col-label">Streamlit</span>
+              <ul>
+                <li><span class="dot">●</span>Resumo por categoria no app</li>
+                <li><span class="dot">●</span>Filtro por categoria com selectbox</li>
+                <li><span class="dot">●</span><code>st.sidebar</code> para filtros</li>
+              </ul>
+            </div>
+          </div>
+          <div class="entregavel"><strong>Entregável 5</strong>App exibe gastos agrupados por categoria com filtro lateral</div>
+        </div>
+      </div>
+
+      <!-- S6 -->
+      <div class="semana">
+        <button class="semana-btn acc-semana">
+          <span class="semana-num-badge">06</span>
+          <div class="semana-meta">
+            <div class="semana-name">Arquivos — salvando os dados</div>
+            <div class="semana-sub">Leitura e escrita · App persiste as transações</div>
+          </div>
+          <span class="semana-arrow">▾</span>
+        </button>
+        <div class="semana-body">
+          <div class="aula-cols">
+            <div class="aula-col aula-col-terminal">
+              <span class="aula-col-label">Terminal</span>
+              <ul>
+                <li><span class="dot">●</span>Ler e escrever arquivos CSV</li>
+                <li><span class="dot">●</span>Salvar transações para não perder os dados</li>
+                <li><span class="dot">●</span>Carregar histórico ao abrir o app</li>
+              </ul>
+            </div>
+            <div class="aula-col aula-col-streamlit">
+              <span class="aula-col-label">Streamlit</span>
+              <ul>
+                <li><span class="dot">●</span>Dados persistem entre sessões</li>
+                <li><span class="dot">●</span>Botão de exportar relatório em CSV</li>
+                <li><span class="dot">●</span><code>st.download_button</code></li>
+              </ul>
+            </div>
+          </div>
+          <div class="entregavel"><strong>Entregável 6</strong>App salva e carrega dados — transações não somem ao fechar</div>
+        </div>
+      </div>
+
+      <!-- S7 -->
+      <div class="semana">
+        <button class="semana-btn acc-semana">
+          <span class="semana-num-badge">07</span>
+          <div class="semana-meta">
+            <div class="semana-name">IA como ferramenta de estudos</div>
+            <div class="semana-sub">Usar IA para aprender mais rápido sem virar dependente</div>
+          </div>
+          <span class="semana-arrow">▾</span>
+        </button>
+        <div class="semana-body">
+          <div class="aula-cols">
+            <div class="aula-col aula-col-terminal">
+              <span class="aula-col-label">Terminal</span>
+              <ul>
+                <li><span class="dot">●</span>Os 5 erros mais comuns e como ler a mensagem</li>
+                <li><span class="dot">●</span>Como pedir ajuda para a IA sem ela escrever o código por você</li>
+                <li><span class="dot">●</span>Debugar com IA: descrever o problema, não pedir a solução</li>
+              </ul>
+            </div>
+            <div class="aula-col aula-col-streamlit">
+              <span class="aula-col-label">Streamlit</span>
+              <ul>
+                <li><span class="dot">●</span>Customizar cores e layout com ajuda da IA</li>
+                <li><span class="dot">●</span>Adicionar novos componentes pedindo explicação, não código pronto</li>
+                <li><span class="dot">●</span>Deixar o app com a sua cara</li>
+              </ul>
+            </div>
+          </div>
+          <div class="entregavel"><strong>Entregável 7</strong>App personalizado visualmente — identidade sua, código entendido por você</div>
+        </div>
+      </div>
+
+      <!-- S8 -->
+      <div class="semana semana-final">
+        <button class="semana-btn acc-semana">
+          <span class="semana-num-badge">08</span>
+          <div class="semana-meta">
+            <div class="semana-name">Projeto final + GitHub + próximos passos</div>
+            <div class="semana-sub">App completo com gráficos · Portfólio publicado · O que vem depois</div>
+          </div>
+          <span class="semana-arrow">▾</span>
+        </button>
+        <div class="semana-body">
+          <div class="aula-cols">
+            <div class="aula-col aula-col-terminal">
+              <span class="aula-col-label">Terminal</span>
+              <ul>
+                <li><span class="dot">●</span>Revisão geral do código</li>
+                <li><span class="dot">●</span>README profissional</li>
+                <li><span class="dot">●</span>Subir projeto no GitHub passo a passo</li>
+              </ul>
+            </div>
+            <div class="aula-col aula-col-streamlit">
+              <span class="aula-col-label">Streamlit</span>
+              <ul>
+                <li><span class="dot">●</span>Gráfico de gastos por categoria</li>
+                <li><span class="dot">●</span>Gráfico de evolução do saldo ao longo do mês</li>
+                <li><span class="dot">●</span>Dashboard final completo</li>
+              </ul>
+            </div>
+          </div>
+          <div class="entregavel"><strong>Entregável Final</strong>App publicado no GitHub com README · Dashboard com gráficos · Portfólio real</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BÔNUS -->
+<section id="bonus" class="section reveal">
+  <h2 class="section-title">Bônus incluídos</h2>
+  <p class="section-sub">Para você ir além das 8 semanas com confiança.</p>
+  <div class="bonus-grid">
+
+    <div class="bonus-card">
+      <span class="bonus-tag">B1 · Mentalidade</span>
+      <h3>Como aprender quando travar</h3>
+      <p>Estratégias práticas para não desistir quando o código não funciona. Como dividir um problema grande em partes pequenas. Como pedir ajuda sem vergonha.</p>
+      <span class="bonus-result" style="background:#dcfce7;color:#166534;">Persistência com método</span>
+      <div class="bonus-num">B1</div>
+    </div>
+
+    <div class="bonus-card">
+      <span class="bonus-tag">B2 · Técnico</span>
+      <h3>Os 5 erros mais comuns em Python</h3>
+      <p>TypeError, IndentationError, NameError, SyntaxError, AttributeError — o que cada um significa, por que acontece e como resolver sem entrar em pânico.</p>
+      <span class="bonus-result" style="background:#dbeafe;color:#1e40af;">Erros viram aprendizado</span>
+      <div class="bonus-num">B2</div>
+    </div>
+
+    <div class="bonus-card bonus-card-wide">
+      <span class="bonus-tag">B3 · Carreira · Para quem terminar o curso e quiser ir para dados</span>
+      <h3>Terminou o básico e se interessou por análise de dados?</h3>
+      <p>Uma visão geral do que é a área de dados, o que você vai aprender no próximo nível e como as habilidades deste curso se conectam com Pandas, NumPy e visualização. Não é obrigatório — é para quem terminar e quiser saber o que vem depois.</p>
+      <span class="bonus-result" style="background:#fef3c7;color:#92400e;">Próximo passo claro, se quiser</span>
+      <div class="bonus-num">B3</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROFESSORA -->
+<section id="professora" class="section reveal" style="border-top:1px solid var(--border-dk);">
+  <div class="prof-grid">
+    <div>
+      <img src="./images/marcela.png" alt="Marcela dos Santos" class="prof-img"/>
+      <p class="prof-img-caption">MARCELA DOS SANTOS<br/>Doutora em Computação · Professora</p>
+    </div>
+    <div class="prof-content">
+      <h3>14 anos ensinando quem tem medo de começar.</h3>
+      <p>Doutora em Ciência da Computação pela Université du Québec à Chicoutimi (Canadá), Marcela construiu uma carreira ajudando pessoas — de iniciantes a pesquisadores — a transformar seu trabalho com Python.</p>
+      <p>Atuou em projetos educacionais com <strong>Intel</strong> e <strong>Google</strong>, traduzindo tecnologia de forma clara e prática. Especialista em criar pontes entre o mundo técnico e as pessoas que precisam dele.</p>
+      <p>Neste curso, ela acompanha cada aluna de perto — com feedback real no código e suporte direto ao longo das 8 semanas.</p>
+      <div class="prof-tags">
+        <span class="prof-tag">Ciência da Computação</span>
+        <span class="prof-tag">14+ anos de ensino</span>
+        <span class="prof-tag">Google · Intel</span>
+        <span class="prof-tag">Python · Streamlit</span>
+        <span class="prof-tag">Université du Québec</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos" class="section reveal" style="border-top:1px solid var(--border-dk);padding-top:4rem;">
+  <h2 class="section-title">O que as alunas dizem</h2>
+    <div class="dep-placeholder">
+    <p>"As aulas com a Marcela são dinâmicas e os resultados você vê já no primeiro dia de aula. E algo que me encanta é que ela não deixa a gente sair da aula com dúvidas sobre o conteúdo do dia." (Juliana Motta - aluna no projeto Girls on Firewalls)️ </p>
+  </div>
+</section>
+
+<!-- MATERIAIS -->
+<section class="section reveal">
+  <h2 class="section-title">Materiais incluídos</h2>
+  <div class="mat-grid">
+    <div class="mat-item">
+      <span class="mat-icon">🎯</span>
+      <h3>Checklist semanal</h3>
+      <p>Guia de estudos toda semana para manter o foco e o ritmo.</p>
+    </div>
+    <div class="mat-item">
+      <span class="mat-icon">📚</span>
+      <h3>Material de apoio</h3>
+      <p>Conteúdo objetivo por semana — sem enrolação, direto ao que importa.</p>
+    </div>
+    <div class="mat-item">
+      <span class="mat-icon">🧪</span>
+      <h3>Exercícios práticos</h3>
+      <p>Exercícios para fixar cada conceito antes de avançar.</p>
+    </div>
+    <div class="mat-item">
+      <span class="mat-icon">💡</span>
+      <h3>Ideias de projetos</h3>
+      <p>Lista de projetos para continuar praticando depois do curso.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="preco" class="section reveal" style="padding-top:0;">
+  <div class="info-section">
+    <div class="info-left">
+      <h3>Tudo incluído na sua inscrição</h3>
+      <ul class="info-checks">
+        <li><span class="ck">✓</span> Aulas ao vivo toda quinta, início 12/06/2026 — 19h às 21h (Brasília)</li>
+        <li><span class="ck">✓</span> 8 semanas · 2h/semana · 8 encontros ao vivo</li>
+        <li><span class="ck">✓</span> 90 dias de acesso às gravações após o encerramento</li>
+        <li><span class="ck">✓</span> Terminal + Streamlit em cada semana</li>
+        <li><span class="ck">✓</span> Projeto financeiro real do início ao fim</li>
+        <li><span class="ck">✓</span> Feedback individual no projeto final</li>
+        <li><span class="ck">✓</span> IA como ferramenta de estudos integrada ao programa</li>
+        <li><span class="ck">✓</span> Checklist, material de apoio e exercícios incluídos</li>
+        <li><span class="ck">✓</span> Portfólio publicado no GitHub ao final</li>
+      </ul>
+    </div>
+    <div class="info-right">
+      <div class="price-label">investimento</div>
+      <div class="price-main">R$&nbsp;897</div>
+      <div class="price-detail">em até 3× &nbsp;·&nbsp; ou CA$ 260</div>
+      <a href="https://forms.gle/vFLm5ohBPs4STqbY8" target="_blank" rel="noopener" class="btn-price">Inscreva-se →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section reveal" style="border-top:1px solid var(--border-dk);">
+  <h2 class="section-title">Perguntas frequentes</h2>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-btn" data-faq><span class="q">Preciso saber programar para fazer o curso?</span><span class="ico">+</span></button>
+      <div class="faq-ans">Não. O curso começa do absoluto zero — instalação, primeiros conceitos, primeiro código. Nenhuma experiência anterior necessária.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-btn" data-faq><span class="q">O que é Streamlit e por que vou aprender isso?</span><span class="ico">+</span></button>
+      <div class="faq-ans">Streamlit é uma biblioteca Python que transforma código em interfaces visuais — botões, gráficos, tabelas — sem precisar saber HTML ou design. Você aprende Python no terminal e já vê o resultado aparecer no app. É a forma mais rápida de criar algo que parece "de verdade" sendo iniciante.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-btn" data-faq><span class="q">As aulas são ao vivo?</span><span class="ico">+</span></button>
+      <div class="faq-ans">Sim. Toda quinta-feira das 19h às 21h (horário de Brasília), a partir de 06/05/2026. As gravações ficam disponíveis por <strong>90 dias</strong> após o encerramento.</div>
+    </div>
+
+
+    <div class="faq-item">
+      <button class="faq-btn" data-faq><span class="q">Quanto tempo preciso por semana?</span><span class="ico">+</span></button>
+      <div class="faq-ans">2h de aula ao vivo por semana, mais o tempo que você quiser dedicar aos exercícios e ao projeto. Funciona com rotina cheia.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-btn" data-faq><span class="q">Este curso é pré-requisito para o curso de análise de dados?</span><span class="ico">+</span></button>
+      <div class="faq-ans">Não necessariamente. Os dois cursos têm públicos diferentes: este é para quem quer aprender a programar. O curso de Análise de Dados é para quem quer especificamente entrar na área de dados — ele também parte do zero. Se você terminar este curso e se interessar por dados, o bônus B3 explica o que vem depois.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+  <div class="cta-final reveal">
+    <h2>Pronta para escrever<br/>sua <em>primeira linha?</em></h2>
+    <p>Em 8 semanas você vai de zero a um app financeiro funcionando — com código que você entende, no terminal e na tela.</p>
+    <div class="actions">
+      <a href="https://forms.gle/vFLm5ohBPs4STqbY8" target="_blank" rel="noopener" class="btn-primary">Inscreva-se →</a>
+      <a href="#conteudo" class="btn-ghost">Ver o programa completo</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; <span id="year"></span> Python Básico · Marcela dos Santos ·
+    <a href="https://www.instagram.com/marceladossantos.prof/" target="_blank" rel="noopener">Instagram</a> ·
+    <a href="https://www.youtube.com/MarcelaDosSantos" target="_blank" rel="noopener">YouTube</a>
+  </p>
+</footer>
+
+<button id="btnTop">↑</button>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  document.getElementById('mobileToggle').addEventListener('click', () => {
+    document.getElementById('mobileDrawer').classList.toggle('open');
+  });
+  function closeDrawer() { document.getElementById('mobileDrawer').classList.remove('open'); }
+
+  document.querySelectorAll('.acc-semana').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const body = btn.nextElementSibling;
+      const arrow = btn.querySelector('.semana-arrow');
+      const isOpen = body.classList.contains('open');
+      document.querySelectorAll('.semana-body.open').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.semana-arrow.open').forEach(a => a.classList.remove('open'));
+      if (!isOpen) { body.classList.add('open'); arrow.classList.add('open'); }
     });
-    // Menu
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    menuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+  });
 
-       // Modal
-    const modal = document.getElementById('modal');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const openers = ['openModalCta','openModalCta2','openModalCta3','openModalCtaMobile']
-      .map(id=>document.getElementById(id)).filter(Boolean);
-    const closeModalBtn = document.getElementById('closeModal');
-
-    function openModal(){ modal.classList.remove('hidden'); modalOverlay.classList.remove('hidden'); }
-    function closeModal(){ modal.classList.add('hidden'); modalOverlay.classList.add('hidden'); }
-    openers.forEach(btn => btn.addEventListener('click', openModal));
-    modalOverlay.addEventListener('click', closeModal);
-    closeModalBtn.addEventListener('click', closeModal);
-
-    // Form (demo)
-    const preForm = document.getElementById('preForm');
-    const toast = document.getElementById('toast');
-    preForm.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const nome = document.getElementById('nome').value.trim();
-      const email = document.getElementById('email').value.trim();
-      if(!nome || !email) return;
-      closeModal();
-      toast.textContent = currentLang === 'pt' ? 'Inscrição registrada! 🎉' : 'Pre‑registration saved! 🎉';
-      toast.classList.remove('hidden');
-      setTimeout(()=> toast.classList.add('hidden'), 2500);
-      preForm.reset();
+  document.querySelectorAll('[data-faq]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ans = btn.nextElementSibling;
+      const ico = btn.querySelector('.ico');
+      const open = ans.classList.contains('open');
+      document.querySelectorAll('.faq-ans.open').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-btn.open').forEach(b => { b.classList.remove('open'); b.querySelector('.ico').textContent = '+'; });
+      if (!open) { ans.classList.add('open'); btn.classList.add('open'); ico.textContent = '+'; }
     });
+  });
 
-    // Google Form em nova aba
-    const googleFormURLs = {
-      pt: 'https://pay.hotmart.com/S105484762U?off=h1no0z38',
-      en: 'https://pay.hotmart.com/S105484762U?off=h1no0z38'
-};
-    //const googleFormURL = 'https://forms.gle/wtr1b8UA2jUnMkN66'; // troque pelo link real
-    function openGoogleForm(){
-      //window.open(googleFormURL, '_blank', 'noopener,noreferrer');
-      const url = googleFormURLs[currentLang] || googleFormURLs.pt;
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }
-    const openFormExternal = document.getElementById('openFormExternal');
-    const openFormExternal2 = document.getElementById('openFormExternal2');
-    openFormExternal.addEventListener('click', openGoogleForm);
-    openFormExternal2.addEventListener('click', openGoogleForm);
+  const btnTop = document.getElementById('btnTop');
+  window.addEventListener('scroll', () => btnTop.classList.toggle('show', window.scrollY > 500));
+  btnTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // Depoimentos
-    const testimonials = [
-      { t: '“Saí do zero e apresentei meu primeiro projeto em 5 semanas!”', a: '— Ana, aluna da Turma 1' },
-      { t: '“A didática é incrível. Finalmente entendi lógica de programação.”', a: '— Bruno, mudança de carreira' },
-      { t: '“Material direto ao ponto e muito apoio. Recomendo!”', a: '— Carla, iniciante' }
-    ];
-    let tIndex = 0;
-    const testimonyEl = document.getElementById('testimony');
-    function renderTestimony(){
-      const item = testimonials[tIndex];
-      testimonyEl.innerHTML = `<p class="text-lg font-semibold">${item.t}</p><p class="text-sm text-slate-600 mt-2">${item.a}</p>`;
-    }
-    function nextT(){ tIndex = (tIndex + 1) % testimonials.length; renderTestimony(); }
-    function prevT(){ tIndex = (tIndex - 1 + testimonials.length) % testimonials.length; renderTestimony(); }
-    ['nextTest','nextTestM'].forEach(id => document.getElementById(id).addEventListener('click', nextT));
-    ['prevTest','prevTestM'].forEach(id => document.getElementById(id).addEventListener('click', prevT));
-    setInterval(nextT, 6000);
-
-    // Capacidade (demo)
-    const capacityText = document.getElementById('capacityText');
-    const capacityBar = document.getElementById('capacityBar');
-    let filled = 9, total = 20;
-    function updateCapacity(){
-      const pct = Math.min(100, Math.round((filled/total)*100));
-      capacityBar.style.width = pct + '%';
-      capacityText.textContent = `${filled}/${total} vagas preenchidas`;
-    }
-    updateCapacity();
-
-
-  </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98322e94c6f9a2d0',t:'MTc1ODU0ODA4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
 </html>
